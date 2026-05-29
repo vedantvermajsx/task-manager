@@ -102,6 +102,19 @@ const TaskList = ({ selectedDate, tasks, setTasks }) => {
         }
     };
 
+    const onEdit = async (id, updatedData) => {
+        try {
+            const response = await TaskApi.updateTask(id, updatedData);
+            if (response.success) {
+                setTasks((prev) =>
+                    prev.map((t) => (t._id === id ? { ...t, ...updatedData } : t))
+                );
+            }
+        } catch (error) {
+            console.error("Error editing task:", error);
+        }
+    };
+
     return (
         <div>
             {tasks.map((task) => (
@@ -111,6 +124,7 @@ const TaskList = ({ selectedDate, tasks, setTasks }) => {
                     {...task}
                     onDelete={onDelete}
                     onToggle={onToggle}
+                    onEdit={onEdit}
                     fetchTasks={fetchTasks}
                 />
             ))}

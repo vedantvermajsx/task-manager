@@ -26,6 +26,16 @@ class AuthApi extends Api {
         return response.data;
     }
 
+    async updateUser(id, updateData) {
+        const response = await this.axios.put(`/user/update/${id}`, updateData);
+        return response.data;
     }
+
+    async updateProfilePic(id, updateData) {
+        const response = await this.axios.put(`/user/update-profile/${id}`, updateData);
+        return response.data;
+    }
+
+}
 
 export default new AuthApi();

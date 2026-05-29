@@ -1,5 +1,6 @@
 import Task from "../models/Task.model.js";
 import TaskResponse from "../models/TaskResponse.model.js";
+import User from "../models/User.model.js";
 
 async function addTask(req,res){
     try {
@@ -25,6 +26,8 @@ async function addTask(req,res){
         await User.findByIdAndUpdate(req.user.id, {
             $inc: { totalTasks: 1 }
         });
+
+        console.log("task added");
 
         const ResponseTask = new TaskResponse(task);
 

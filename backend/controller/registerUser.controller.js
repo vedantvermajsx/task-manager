@@ -22,11 +22,39 @@ async function registerUser(req,res){
                 message: "Invalid email"
             });
         }
-        
-        if(!verifyName(name)){
+
+        if(name.length<3 || name.length>50){
             return res.status(400).json({
                 success: false,
-                message: "Invalid name"
+                message: "Name must be between 3 and 50 characters"
+            });
+        }
+
+        if(password.length<8){
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at least 8 characters long"
+            });
+        }
+
+        if(password.length>100){
+            return res.status(400).json({
+                success: false,
+                message: "Password must be at most 100 characters long"
+            });
+        }
+
+        if(email.length<3 || email.length>50){
+            return res.status(400).json({
+                success: false,
+                message: "Email must be between 3 and 50 characters"
+            });
+        }
+
+        if(name.length>50){
+            return res.status(400).json({
+                success: false,
+                message: "Name must be at most 50 characters long"
             });
         }
 
@@ -75,9 +103,5 @@ function verifyEmail(email){
     return emailRegex.test(email);
 }
 
-function verifyName(name){
-    const nameRegex = /^[a-zA-Z]+$/;
-    return nameRegex.test(name);
-}
 
 export default registerUser;

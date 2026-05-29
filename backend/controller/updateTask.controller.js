@@ -1,4 +1,5 @@
 import Task from "../models/Task.model.js";
+import User from "../models/User.model.js";
 
 async function updateTask(req,res){
     try {

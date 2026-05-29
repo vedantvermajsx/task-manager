@@ -7,6 +7,7 @@ import Authenticate from './middleware/auth.middleware.js'
 import Interceptor from './middleware/interceptor.middleware.js'
 import authRouter from './routes/auth.routes.js'
 import taskRouter from './routes/task.routes.js'
+import userRouter from './routes/user.routes.js';
 
 
 dotenv.config();
@@ -33,7 +34,7 @@ app.use(Interceptor);
 
 app.use("/auth",authRouter);
 app.use("/task",Authenticate,taskRouter);
-
+app.use("/user",Authenticate,userRouter);
 
 app.get("/health",(req,res)=>{
     res.status(200).json({success:true,message:"ok"});

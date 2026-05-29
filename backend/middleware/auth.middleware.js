@@ -20,6 +20,12 @@ const JWT_SECRET=process.env.JWT_SECRET;
             JWT_SECRET
         );
 
+        if(!decodedToken){
+            return res.status(401).json({
+                message: "Unauthorized"
+            });
+        }
+
         req.user = decodedToken;
 
         next();

@@ -1,18 +1,10 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import {
-  Box,
-  Container,
-  Stack,
-  Flex,
-  Avatar,
+  Box, Container, Stack, Flex, Avatar,
   Heading,
-  Text,
-  Button,
-  SimpleGrid,
-  Stat,
-  StatNumber,
-  Badge,
-  Icon,
+  Text, Button, SimpleGrid, Stat,
+  StatNumber, Badge, Icon,
+  Input, Textarea, HStack, Spinner
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -21,10 +13,16 @@ import {
   FiXCircle,
   FiClipboard,
   FiLogOut,
+  FiEdit2,
+  FiSave,
+  FiX,
+  FiCamera
 } from "react-icons/fi";
 import AuthApi from "../api/AuthApi";
 
 import { AuthContext } from "../contexts/AuthContext";
+import CloudinaryApi from "../api/cloudinary.js";
+
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -42,23 +40,90 @@ export default function Profile() {
   };
 
 
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const [totalTasks, setTotalTask] = useState(0);
   const [completedTasks, setCompletedTask] = useState(0);
   const [failedTasks, setFailedTask] = useState(0);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [editUsername, setEditUsername] = useState("");
+  const [editBio, setEditBio] = useState("");
+  const [editAvatarUrl, setEditAvatarUrl] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+
+  const fileInputRef = useRef(null);
+
+
 
   useEffect(() => {
     const fetchProfile = async () => {
-      setTotalTask(user.totalTasks);
-      setCompletedTask(user.completedTasks);
-      setFailedTask(totalTasks - completedTasks);
+      if (user) {
+        setTotalTask(user.totalTasks || 0);
+        setCompletedTask(user.completedTasks || 0);
+        setFailedTask((user.totalTasks || 0) - (user.completedTasks || 0));
 
+        setEditUsername(user.username || "");
+        setEditBio(user.bio || "");
+        setEditAvatarUrl(user.avatar || "");
+      }
     };
 
     fetchProfile();
-  }, []);
+  }, []2);
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+
+      throw new Error("Not implemented yet");
+
+      const data = await CloudinaryApi.uploadImage(file);
+
+      if (data.secure_url) {
+        setEditAvatarUrl(data.secure_url);
+      } else {
+        console.error("Cloudinary upload error:", data);
+        alert("Cloudinary upload failed. Check your Cloud Name and Upload Preset.");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Something went wrong during the upload.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    setIsSaving(true);
+    try {
+      let updatedUser = { ...user };
+      const response = await AuthApi.updateUser(user._id || user.id, { username: editUsername, bio: editBio });
+      if (response.success) {
+        updatedUser = { ...updatedUser, username: editUsername, bio: editBio };
+      }
+
+      if (editAvatarUrl && editAvatarUrl !== user.avatar) {
+        const picResponse = await AuthApi.updateProfilePic(user._id || user.id, { url: editAvatarUrl });
+        if (picResponse.success) {
+          updatedUser.avatar = editAvatarUrl;
+        }
+      }
+
+      setUser(updatedUser);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to update profile", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   if (!user) {
     return (
@@ -122,15 +187,74 @@ export default function Profile() {
             direction={{ base: "column", md: "row" }}
             align="center"
             gap={10}
+            position="relative"
           >
-            <Avatar
-              size="2xl"
-              src={user?.avatar}
-              name={user?.username}
-              border="3px solid rgba(255,255,255,0.08)"
-            />
+            {!isEditing && (
+              <Button
+                position="absolute"
+                top={0}
+                right={0}
+                leftIcon={<FiEdit2 />}
+                onClick={() => setIsEditing(true)}
+                bg="whiteAlpha.100"
+                color="white"
+                _hover={{ bg: "whiteAlpha.200" }}
+                rounded="xl"
+                size="sm"
+              >
+                Edit Profile
+              </Button>
+            )}
 
-            <Box flex="1">
+            <Box position="relative">
+              <Avatar
+                size="2xl"
+                src={isEditing ? editAvatarUrl : user?.avatar}
+                name={user?.username}
+                border="3px solid rgba(255,255,255,0.08)"
+                opacity={isUploading ? 0.5 : 1}
+              />
+              {isUploading && (
+                <Flex
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  w="100%"
+                  h="100%"
+                  align="center"
+                  justify="center"
+                >
+                  <Spinner color="blue.500" thickness="4px" />
+                </Flex>
+              )}
+              {isEditing && !isUploading && (
+                <>
+                  <Flex
+                    position="absolute"
+                    bottom={0}
+                    right={0}
+                    bg="blue.500"
+                    p={2}
+                    rounded="full"
+                    cursor="pointer"
+                    onClick={() => fileInputRef.current?.click()}
+                    _hover={{ bg: "blue.400" }}
+                    border="2px solid #111111"
+                  >
+                    <Icon as={FiCamera} color="white" />
+                  </Flex>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    onChange={handleImageChange}
+                  />
+                </>
+              )}
+            </Box>
+
+            <Box flex="1" w="full">
               <Stack spacing={4}>
                 <Badge
                   colorScheme="gray"
@@ -144,22 +268,77 @@ export default function Profile() {
                   {user?.role || "User"}
                 </Badge>
 
-                <Heading size="2xl" fontWeight="800" color="white">
-                  {user?.username || "Guest"}
-                </Heading>
+                {isEditing ? (
+                  <Stack spacing={3}>
+                    <Input
+                      value={editUsername}
+                      onChange={(e) => setEditUsername(e.target.value)}
+                      bg="whiteAlpha.100"
+                      color="white"
+                      border="none"
+                      _focus={{ ring: 2, ringColor: "blue.400" }}
+                      placeholder="Username"
+                    />
+                    <Textarea
+                      value={editBio}
+                      onChange={(e) => setEditBio(e.target.value)}
+                      bg="whiteAlpha.100"
+                      color="white"
+                      border="none"
+                      _focus={{ ring: 2, ringColor: "blue.400" }}
+                      placeholder="Bio (optional)"
+                      resize="vertical"
+                    />
+                    <HStack spacing={3}>
+                      <Button
+                        leftIcon={<FiSave />}
+                        onClick={handleSaveProfile}
+                        bg="blue.500"
+                        color="white"
+                        _hover={{ bg: "blue.400" }}
+                        rounded="xl"
+                        size="sm"
+                      >
+                        {isSaving ? <Spinner size="sm" /> : "Save"}
+                      </Button>
+                      <Button
+                        leftIcon={<FiX />}
+                        onClick={() => {
+                          setEditUsername(user?.username || "");
+                          setEditBio(user?.bio || "");
+                          setEditAvatarUrl(user?.avatar || "");
+                          setIsEditing(false);
+                        }}
+                        bg="whiteAlpha.100"
+                        color="white"
+                        _hover={{ bg: "whiteAlpha.200" }}
+                        rounded="xl"
+                        size="sm"
+                      >
+                        Cancel
+                      </Button>
+                    </HStack>
+                  </Stack>
+                ) : (
+                  <>
+                    <Heading size="2xl" fontWeight="800" color="white">
+                      {user?.username || "Guest"}
+                    </Heading>
 
-                <Text color="whiteAlpha.700" fontSize="lg">
-                  {user?.email || "No Email"}
-                </Text>
+                    <Text color="whiteAlpha.700" fontSize="lg">
+                      {user?.email || "No Email"}
+                    </Text>
 
-                {user?.bio && (
-                  <Text
-                    color="whiteAlpha.800"
-                    lineHeight="1.8"
-                    maxW="700px"
-                  >
-                    {user.bio}
-                  </Text>
+                    {user?.bio && (
+                      <Text
+                        color="whiteAlpha.800"
+                        lineHeight="1.8"
+                        maxW="700px"
+                      >
+                        {user.bio}
+                      </Text>
+                    )}
+                  </>
                 )}
               </Stack>
             </Box>
