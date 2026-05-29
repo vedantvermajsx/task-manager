@@ -66,7 +66,7 @@ export default function Home() {
   };
 
   const name = user?.username || 'Guest';
-  const avatar = user?.avatar || 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.GmWaVMo5nh1zRRlhUtYoSAHaG4%3Fr%3D0%26pid%3DApi&f=1&ipt=d905f5d456b4da1504cb5e5a724cbebcd83ba6190ace8c6668fdbf9d936777dc&ipo=images';
+  const avatar = user?.avatar || '';
 
 
   const logout = async () => {

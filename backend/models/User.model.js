@@ -11,7 +11,23 @@ const userSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
-    password:{
+    avatar:{
+        type:String,
+        default:"https://cdn-icons-png.flaticon.com/512/149/149071.png"
+    },
+    description:{
+        type:String,
+        default:""
+    },
+    totalTasks:{
+        type:Number,
+        default:0
+    },
+    completedTasks:{
+        type:Number,
+        default:0
+    },
+    password:{        
         type:String,
         required:true
     }

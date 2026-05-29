@@ -53,7 +53,7 @@ export default function Register() {
     setLoading(true);
 
     try {
-      const request = new RegisterRequest(form.email, form.name, form.password);
+      const request = new RegisterRequest(form.name, form.email, form.password);
       const data = await AuthApi.register(request);
 
       if (data.success) {

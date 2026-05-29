@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
 
 
-const JWT_SECRET=process.env.JWT_SECRET;
-
 function Authenticate(req, res, next) {
+
+const JWT_SECRET=process.env.JWT_SECRET;
 
     try {
 

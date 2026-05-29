@@ -22,7 +22,7 @@ class AuthApi extends Api {
     }
 
     async logout(){
-        const response = await this.axios.post("/logout");
+        const response = await this.axios.post("/auth/logout");
         return response.data;
     }
 

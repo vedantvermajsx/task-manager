@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import './index.css'
@@ -39,11 +38,9 @@ const theme = extendTheme({
 })
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <ChakraProvider theme={theme}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </ChakraProvider>
-  </StrictMode>,
+  <ChakraProvider theme={theme}>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </ChakraProvider>
 )

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Box,
   Container,
@@ -8,189 +8,228 @@ import {
   Heading,
   Text,
   Button,
-  Divider,
   SimpleGrid,
   Stat,
-  StatLabel,
   StatNumber,
-  StatHelpText,
+  Badge,
+  Icon,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { FiArrowLeft, FiActivity, FiCheckCircle, FiXCircle } from "react-icons/fi";
-import { AuthContext } from "../contexts/AuthContext";
-import { useContext } from "react";
+import {
+  FiArrowLeft,
+  FiCheckCircle,
+  FiXCircle,
+  FiClipboard,
+  FiLogOut,
+} from "react-icons/fi";
+import AuthApi from "../api/AuthApi";
 
-const MotionBox = motion(Box);
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function Profile() {
   const navigate = useNavigate();
 
+
+  const logout = async () => {
+    try {
+      const response = await AuthApi.logout();
+      if (response.success) {
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Failed to logout:", error);
+    }
+  };
+
+
   const { user } = useContext(AuthContext);
 
+  const [totalTasks, setTotalTask] = useState(0);
+  const [completedTasks, setCompletedTask] = useState(0);
+  const [failedTasks, setFailedTask] = useState(0);
 
-
-  const [stats, setStats] = useState({
-    created: 0,
-    completed: 0,
-    failed: 0,
-  });
 
   useEffect(() => {
-    const tasks = JSON.parse(localStorage.getItem("t-tasks") || "[]");
-    setStats({
-      created: tasks.length,
-      completed: tasks.filter(t => t.status === "completed").length,
-      failed: tasks.filter(t => t.status === "failed").length,
-    });
+    const fetchProfile = async () => {
+      setTotalTask(user.totalTasks);
+      setCompletedTask(user.completedTasks);
+      setFailedTask(totalTasks - completedTasks);
+
+    };
+
+    fetchProfile();
   }, []);
 
-  const name = user?.username || 'Guest';
-  const email = user?.email || 'Guest@gmail.com';
-  const avatar = user?.avatar || 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.GmWaVMo5nh1zRRlhUtYoSAHaG4%3Fr%3D0%26pid%3DApi&f=1&ipt=d905f5d456b4da1504cb5e5a724cbebcd83ba6190ace8c6668fdbf9d936777dc&ipo=images';
+  if (!user) {
+    return (
+      <Flex
+        minH="100vh"
+        bg="#0a0a0a"
+        align="center"
+        justify="center"
+        color="white"
+      >
+        <Text fontSize="lg" color="whiteAlpha.700">
+          Loading profile...
+        </Text>
+      </Flex>
+    );
+  }
 
   return (
-    <div className="min-h-screen text-white bg-transparent relative">
-      {/* Navbar */}
-      <Flex
-        as="nav"
-        align="center"
-        justify="space-between"
-        padding="1.5rem 4rem"
-        className="glass sticky top-0 z-50 border-b border-white/10"
-      >
-        <Button
-          variant="ghost"
-          color="whiteAlpha.700"
-          _hover={{ color: "white", bg: "whiteAlpha.100" }}
-          leftIcon={<FiArrowLeft />}
-          onClick={() => navigate("/")}
-          fontSize="xs"
-          fontWeight="900"
-          textTransform="uppercase"
-          letterSpacing="0.2em"
-        >
-          Back
-        </Button>
-        <Heading as="h2" size="sm" letterSpacing="0.2em" className="text-white font-black uppercase">
-          Profile
-        </Heading>
-        <Box w="80px" /> {/* Spacer */}
-      </Flex>
+    <Box minH="100vh" bg="#0a0a0a" color="white" py={10} px={4}>
+      <Container maxW="6xl">
+        {/* Navbar */}
+        <Flex justify="space-between" align="center" mb={10}>
+          <Button
+            leftIcon={<FiArrowLeft />}
+            onClick={() => navigate("/")}
+            bg="whiteAlpha.100"
+            color="white"
+            _hover={{
+              bg: "whiteAlpha.200",
+            }}
+            rounded="xl"
+          >
+            Back
+          </Button>
 
-      <Container maxW={"4xl"} py={24}>
-        <Stack spacing={16}>
-          {/* Hero Section */}
-          <MotionBox
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="glass-card p-12 rounded-[3.5rem] border-none custom-clip flex flex-col items-center text-center"
+          <Button
+            leftIcon={<FiLogOut />}
+            onClick={logout}
+            bg="red.500"
+            color="white"
+            _hover={{
+              bg: "red.400",
+            }}
+            rounded="xl"
+          >
+            Logout
+          </Button>
+        </Flex>
+
+        {/* Profile Card */}
+        <Box
+          bg="#111111"
+          border="1px solid"
+          borderColor="whiteAlpha.100"
+          rounded="3xl"
+          p={{ base: 8, md: 12 }}
+          mb={10}
+          boxShadow="0 0 40px rgba(0,0,0,0.5)"
+        >
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            align="center"
+            gap={10}
           >
             <Avatar
               size="2xl"
-              name={name}
-              src={avatar}
-              border="2px solid rgba(255,255,255,0.3)"
-              p={1}
-              mb={8}
+              src={user?.avatar}
+              name={user?.username}
+              border="3px solid rgba(255,255,255,0.08)"
             />
-            <Heading size="2xl" letterSpacing="-0.04em" fontWeight={900} mb={2} color="white">
-              {name}
-            </Heading>
-            <Heading size="lg" letterSpacing="-0.04em" fontWeight={600} mb={2} color="white">
-              {email}
-            </Heading>
 
-            <Text color="brand.400" fontWeight={900} fontSize="xs" textTransform="uppercase" letterSpacing="0.4em">
-              Lead System Architect
-            </Text>
+            <Box flex="1">
+              <Stack spacing={4}>
+                <Badge
+                  colorScheme="gray"
+                  w="fit-content"
+                  px={4}
+                  py={1}
+                  rounded="full"
+                  fontSize="0.75rem"
+                  textTransform="capitalize"
+                >
+                  {user?.role || "User"}
+                </Badge>
 
-            <Divider borderColor="whiteAlpha.300" my={10} maxW="100px" />
+                <Heading size="2xl" fontWeight="800" color="white">
+                  {user?.username || "Guest"}
+                </Heading>
 
-            <Text color="whiteAlpha.800" fontSize="md" maxW="md" lineHeight="1.8" fontWeight="500">
-              Overseeing the core infrastructure and task orchestration for the T-Manager network.
-              Dedicated to absolute efficiency and geometric precision.
-            </Text>
-          </MotionBox>
+                <Text color="whiteAlpha.700" fontSize="lg">
+                  {user?.email || "No Email"}
+                </Text>
 
-          {/* Stats Grid */}
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
-            <MotionBox
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 }}
-              className="glass-card p-10 rounded-[2.5rem] border-none"
-            >
-              <Stat>
-                <StatLabel color="whiteAlpha.800" mb={4}>
-                  <Flex align="center" gap={3}>
-                    <FiActivity size={14} />
-                    <Text fontSize="10px" fontWeight={900} textTransform="uppercase" letterSpacing="0.2em">Assigned</Text>
-                  </Flex>
-                </StatLabel>
-                <StatNumber fontSize="6xl" fontWeight={900} color="white">{stats.created}</StatNumber>
-                <StatHelpText color="whiteAlpha.600" fontSize="xs">Lifetime directives</StatHelpText>
-              </Stat>
-            </MotionBox>
-
-            <MotionBox
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              className="glass-card p-10 rounded-[2.5rem] border-none shadow-[0_0_40px_-10px_rgba(72,187,120,0.2)]"
-            >
-              <Stat>
-                <StatLabel color="green.400" mb={4}>
-                  <Flex align="center" gap={3}>
-                    <FiCheckCircle size={14} />
-                    <Text fontSize="10px" fontWeight={900} textTransform="uppercase" letterSpacing="0.2em">Resolved</Text>
-                  </Flex>
-                </StatLabel>
-                <StatNumber fontSize="6xl" fontWeight={900} color="green.400">{stats.completed}</StatNumber>
-                <StatHelpText color="whiteAlpha.600" fontSize="xs">Successful executions</StatHelpText>
-              </Stat>
-            </MotionBox>
-
-            <MotionBox
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-              className="glass-card p-10 rounded-[2.5rem] border-none shadow-[0_0_40px_-10px_rgba(245,101,101,0.2)]"
-            >
-              <Stat>
-                <StatLabel color="red.400" mb={4}>
-                  <Flex align="center" gap={3}>
-                    <FiXCircle size={14} />
-                    <Text fontSize="10px" fontWeight={900} textTransform="uppercase" letterSpacing="0.2em">Aborted</Text>
-                  </Flex>
-                </StatLabel>
-                <StatNumber fontSize="6xl" fontWeight={900} color="red.400">{stats.failed}</StatNumber>
-                <StatHelpText color="whiteAlpha.600" fontSize="xs">System failures</StatHelpText>
-              </Stat>
-            </MotionBox>
-          </SimpleGrid>
-
-          {/* Action Footer */}
-          <Flex justify="center" pt={10}>
-            <Button
-              variant="outline"
-              borderColor="whiteAlpha.300"
-              _hover={{ bg: "whiteAlpha.100", borderColor: "white" }}
-              color="whiteAlpha.700"
-              px={12} h="60px"
-              borderRadius="2xl"
-              fontSize="xs"
-              fontWeight="900"
-              textTransform="uppercase"
-              letterSpacing="0.3em"
-              onClick={() => navigate("/")}
-            >
-              Terminate Session
-            </Button>
+                {user?.bio && (
+                  <Text
+                    color="whiteAlpha.800"
+                    lineHeight="1.8"
+                    maxW="700px"
+                  >
+                    {user.bio}
+                  </Text>
+                )}
+              </Stack>
+            </Box>
           </Flex>
-        </Stack>
+        </Box>
+
+        {/* Stats */}
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+          <StatCard
+            title="Total Tasks"
+            value={totalTasks}
+            icon={FiClipboard}
+            color="#3b82f6"
+          />
+
+          <StatCard
+            title="Completed"
+            value={completedTasks}
+            icon={FiCheckCircle}
+            color="#22c55e"
+          />
+
+          <StatCard
+            title="Failed"
+            value={failedTasks}
+            icon={FiXCircle}
+            color="#ef4444"
+          />
+        </SimpleGrid>
       </Container>
-    </div>
+    </Box>
+  );
+}
+
+function StatCard({ title, value, icon, color }) {
+  return (
+    <Box
+      bg="#111111"
+      border="1px solid"
+      borderColor="whiteAlpha.100"
+      rounded="2xl"
+      p={7}
+      boxShadow="0 0 30px rgba(0,0,0,0.35)"
+      transition="0.2s ease"
+      _hover={{
+        borderColor: "whiteAlpha.300",
+      }}
+    >
+      <Flex justify="space-between" align="center" mb={6}>
+        <Text color="whiteAlpha.700" fontWeight="600">
+          {title}
+        </Text>
+
+        <Flex
+          w="50px"
+          h="50px"
+          align="center"
+          justify="center"
+          rounded="xl"
+          bg={`${color}20`}
+        >
+          <Icon as={icon} color={color} boxSize={5} />
+        </Flex>
+      </Flex>
+
+      <Stat p={0}>
+        <StatNumber fontSize="5xl" fontWeight="800" color="white">
+          {value}
+        </StatNumber>
+      </Stat>
+    </Box>
   );
 }
