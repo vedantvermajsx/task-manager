@@ -71,7 +71,7 @@ export default function Profile() {
     };
 
     fetchProfile();
-  }, []2);
+  }, []);
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
