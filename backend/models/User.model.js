@@ -8,7 +8,7 @@ const userSchema=new mongoose.Schema({
             max:50
         },
         required:true,
-        unique:true
+        unique:false
     },
     email:{
         type:String,
@@ -30,7 +30,7 @@ const userSchema=new mongoose.Schema({
     description:{
         type:String,
         length:{
-            min:3,
+            min:0,
             max:500
         },
         default:""
@@ -45,7 +45,7 @@ const userSchema=new mongoose.Schema({
     },
     password:{        
         type:String,
-        required:true
+        required:true,
     }
 })
 

@@ -12,12 +12,17 @@
   },
   "keywords": [],
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
+    "@emailjs/nodejs": "^5.0.2",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.2.1",
+    "cookie-parser": "1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^17.4.2",
+    "emailjs-com": "^3.2.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^9.6.2",
-    "cookie-parser": "1.4.7",
-    "cors": "^2.8.5"
+    "multer": "^2.0.2"
   }
 }

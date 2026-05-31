@@ -20,11 +20,24 @@ async function deleteTask(req,res){
             return res.status(401).json({success:false,message:"Unauthorized"});
         }
 
+        // Check if task is expired (24 hours since creation) and not completed
+        const hoursElapsed = (Date.now() - new Date(task.createdAt).getTime()) / (1000 * 60 * 60);
+        if(hoursElapsed >= 24 && !task.completed){
+            return res.status(403).json({success:false,message:"Task has expired after 24 hours and is now failed. Cannot delete."});
+        }
+
         await Task.findByIdAndDelete(id);
 
         await User.findByIdAndUpdate(userId, {
             $inc: { totalTasks: -1 }
         });
+
+        if(task.completed){
+            await User.findByIdAndUpdate(userId, {
+                $inc: { totalCompletedTasks: -1 }
+            });
+        }
+        
 
         res.status(200).json({success:true,message:"Task deleted successfully"});
     } catch (error) {

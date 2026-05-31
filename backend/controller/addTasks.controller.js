@@ -27,8 +27,7 @@ async function addTask(req,res){
             $inc: { totalTasks: 1 }
         });
 
-        console.log("task added");
-
+     
         const ResponseTask = new TaskResponse(task);
 
         res.status(201).json({

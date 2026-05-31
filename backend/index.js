@@ -8,6 +8,7 @@ import Interceptor from './middleware/interceptor.middleware.js'
 import authRouter from './routes/auth.routes.js'
 import taskRouter from './routes/task.routes.js'
 import userRouter from './routes/user.routes.js';
+import resetRouter from './routes/reset.routes.js';
 
 
 dotenv.config();
@@ -25,16 +26,19 @@ app.use(cors({
 }));
 
 app.use(cookieParser());
-app.use(express.json()); 
 
 connectDB();
 app.use(Interceptor);
 
 
 
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/auth",authRouter);
 app.use("/task",Authenticate,taskRouter);
 app.use("/user",Authenticate,userRouter);
+app.use("/reset",resetRouter);
 
 app.get("/health",(req,res)=>{
     res.status(200).json({success:true,message:"ok"});
