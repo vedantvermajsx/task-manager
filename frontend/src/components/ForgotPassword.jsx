@@ -89,7 +89,7 @@ export default function ForgotPassword() {
     setError("");
 
     try {
-      await AuthApi.updatePassword(new PasswordRequest(email, password, token));
+      await AuthApi.updatePassword(new PasswordRequest(email, null, password, token));
       setStep(4);
     } catch (err) {
       console.log(err?.response?.data?.message);

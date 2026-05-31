@@ -14,7 +14,8 @@ async function sendOtp(req,res){
 
     const otpData=await Otp.findOne({email});
     if(otpData){
-        return res.status(400).json({message:"Otp sent"});
+        await emailJs.sendOtp(email,otpData.otp);
+        return res.status(200).json({message:"Otp sent"});
     }
 
     try{
