@@ -102,7 +102,7 @@ export default function Register() {
               Create Account
             </Heading>
             <Text className="text-white/80 mt-2 text-xs font-bold uppercase tracking-[0.2em]">
-              Join T-Manager System
+              Join Task Manager System
             </Text>
           </div>
 

@@ -31,8 +31,32 @@ class AuthApi extends Api {
         return response.data;
     }
 
-    async updateProfilePic(id, updateData) {
-        const response = await this.axios.put(`/user/update-profile/${id}`, updateData);
+    async updateProfilePic(id, file) {
+        const formData = new FormData();
+        formData.append("profilePic", file);
+
+        const response=this.axios.put(`/user/update-profile/${id}`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+
+
+        return response;
+    }
+
+    async sendOtp(passwordRequest){
+        const response = await this.axios.post("/reset/send-otp", passwordRequest);
+        return response.data;
+    }
+
+    async verifyOtp(passwordRequest){
+        const response = await this.axios.post("/reset/verify-otp", passwordRequest);
+        return response.data;
+    }
+
+    async updatePassword(passwordRequest){
+        const response = await this.axios.post("/reset/update-password", passwordRequest);
         return response.data;
     }
 

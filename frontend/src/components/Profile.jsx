@@ -21,8 +21,7 @@ import {
 import AuthApi from "../api/AuthApi";
 
 import { AuthContext } from "../contexts/AuthContext";
-import CloudinaryApi from "../api/cloudinary.js";
-
+import MonthStatus from "./MonthStatus";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -49,7 +48,7 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [editUsername, setEditUsername] = useState("");
-  const [editBio, setEditBio] = useState("");
+  const [editDescription, setEditDescription] = useState("");
   const [editAvatarUrl, setEditAvatarUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
@@ -65,7 +64,7 @@ export default function Profile() {
         setFailedTask((user.totalTasks || 0) - (user.completedTasks || 0));
 
         setEditUsername(user.username || "");
-        setEditBio(user.bio || "");
+        setEditDescription(user.description || "");
         setEditAvatarUrl(user.avatar || "");
       }
     };
@@ -77,47 +76,44 @@ export default function Profile() {
     const file = e.target.files[0];
     if (!file) return;
 
-    setIsUploading(true);
-
     try {
+      setIsUploading(true);
 
-      throw new Error("Not implemented yet");
+      const data = await AuthApi.updateProfilePic(user._id || user.id, file);
 
-      const data = await CloudinaryApi.uploadImage(file);
-
-      if (data.secure_url) {
-        setEditAvatarUrl(data.secure_url);
-      } else {
-        console.error("Cloudinary upload error:", data);
-        alert("Cloudinary upload failed. Check your Cloud Name and Upload Preset.");
+      if (data.success) {
+        setEditAvatarUrl(data.url);
       }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("Something went wrong during the upload.");
+    } catch (err) {
+      alert(err.response.data.message);
     } finally {
       setIsUploading(false);
     }
+
   };
 
   const handleSaveProfile = async () => {
     if (!user) return;
+
     setIsSaving(true);
+
     try {
-      let updatedUser = { ...user };
-      const response = await AuthApi.updateUser(user._id || user.id, { username: editUsername, bio: editBio });
+      const response = await AuthApi.updateUser(user._id || user.id, {
+        username: editUsername,
+        bio: editDescription,
+      });
+
       if (response.success) {
-        updatedUser = { ...updatedUser, username: editUsername, bio: editBio };
-      }
+        const updated = response.user || {
+          ...user,
+          username: editUsername,
+          description: editDescription,
+          avatar: editAvatarUrl,
+        };
 
-      if (editAvatarUrl && editAvatarUrl !== user.avatar) {
-        const picResponse = await AuthApi.updateProfilePic(user._id || user.id, { url: editAvatarUrl });
-        if (picResponse.success) {
-          updatedUser.avatar = editAvatarUrl;
-        }
+        setUser(updated);
+        setIsEditing(false);
       }
-
-      setUser(updatedUser);
-      setIsEditing(false);
     } catch (error) {
       console.error("Failed to update profile", error);
     } finally {
@@ -192,8 +188,8 @@ export default function Profile() {
             {!isEditing && (
               <Button
                 position="absolute"
-                top={0}
-                right={0}
+                top={-5}
+                right={-5}
                 leftIcon={<FiEdit2 />}
                 onClick={() => setIsEditing(true)}
                 bg="whiteAlpha.100"
@@ -201,8 +197,9 @@ export default function Profile() {
                 _hover={{ bg: "whiteAlpha.200" }}
                 rounded="xl"
                 size="sm"
+                zIndex={5}
               >
-                Edit Profile
+                edit profile
               </Button>
             )}
 
@@ -280,8 +277,8 @@ export default function Profile() {
                       placeholder="Username"
                     />
                     <Textarea
-                      value={editBio}
-                      onChange={(e) => setEditBio(e.target.value)}
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
                       bg="whiteAlpha.100"
                       color="white"
                       border="none"
@@ -305,7 +302,7 @@ export default function Profile() {
                         leftIcon={<FiX />}
                         onClick={() => {
                           setEditUsername(user?.username || "");
-                          setEditBio(user?.bio || "");
+                          setEditDescription(user?.description || "");
                           setEditAvatarUrl(user?.avatar || "");
                           setIsEditing(false);
                         }}
@@ -329,15 +326,17 @@ export default function Profile() {
                       {user?.email || "No Email"}
                     </Text>
 
-                    {user?.bio && (
+                    <Box bg="whiteAlpha.100" p={4} rounded="xl">
+
                       <Text
-                        color="whiteAlpha.800"
+                        color={user?.description ? "whiteAlpha.800" : "whiteAlpha.500"}
                         lineHeight="1.8"
                         maxW="700px"
+                        fontStyle={user?.description ? "normal" : "italic"}
                       >
-                        {user.bio}
+                        {user?.description || "No bio added yet"}
                       </Text>
-                    )}
+                    </Box>
                   </>
                 )}
               </Stack>
@@ -368,6 +367,8 @@ export default function Profile() {
             color="#ef4444"
           />
         </SimpleGrid>
+
+        <MonthStatus />
       </Container>
     </Box>
   );

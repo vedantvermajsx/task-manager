@@ -93,7 +93,7 @@ export default function Login() {
                             Welcome Back
                         </Heading>
                         <Text className="text-white/80 mt-2 text-xs font-bold uppercase tracking-[0.2em]">
-                            T-Manager Dashboard
+                            T Dashboard
                         </Text>
                     </div>
 

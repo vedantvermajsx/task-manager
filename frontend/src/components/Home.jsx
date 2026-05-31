@@ -21,6 +21,8 @@ import { FiPlus } from "react-icons/fi";
 import TaskList from "./TaskList";
 import { useState } from "react";
 import TaskApi from "../api/TaskApi";
+import MonthStatus from "./MonthStatus";
+
 import TaskRequest from "../models/TaskRequest.js";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { useContext } from "react";
@@ -37,6 +39,13 @@ export default function Home() {
   const [taskDescription, setTaskDescription] = useState("");
   const [adding, setAdding] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [tasksCount, setTasksCount] = useState(0);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const selected = new Date(selectedDate);
+  selected.setHours(0, 0, 0, 0);
+  const isPastDate = selected < today;
 
   const addTask = async (e) => {
     e.preventDefault();
@@ -54,7 +63,7 @@ export default function Home() {
 
       if (response.success) {
         setTasks((prev) => [...prev, response.ResponseTask]);
-
+        setTasksCount((prev) => prev + 1);
         setTaskTitle("");
         setTaskDescription("");
       }
@@ -87,12 +96,13 @@ export default function Home() {
         as="nav"
         align="center"
         justify="space-between"
-        padding="1.5rem 4rem"
+        px={{ base: 4, md: 8, lg: "4rem" }}
+        py={{ base: 3, md: "1.5rem" }}
         className="sticky top-0 z-50 border-b border-white/5 bg-[#050510]/80 backdrop-blur-xl"
       >
         <Flex align="center" gap={3} onClick={() => navigate("/")} cursor="pointer">
           <Heading as="h2" size="sm" letterSpacing="0.2em" className="text-white font-black uppercase">
-            T-Manager
+            Task Manager
           </Heading>
         </Flex>
 
@@ -128,17 +138,21 @@ export default function Home() {
       </Flex>
 
 
-      <Container maxW={"7xl"} py={16}>
-        <Flex gap={10} align="start">
+      <Container maxW={"7xl"} py={{ base: 6, md: 16 }} px={{ base: 4, md: 6 }}>
+        <Flex
+          gap={{ base: 6, md: 10 }}
+          align="start"
+          direction={{ base: "column-reverse", lg: "row" }}
+        >
 
           {/* LEFT SIDE */}
-          <Box flex="2">
-            <VStack spacing={10} align="stretch">
+          <Box flex="2" w={{ base: "100%", lg: "auto" }}>
+            <VStack spacing={{ base: 6, md: 10 }} align="stretch">
 
               {/* Header */}
               <Box>
                 <Heading
-                  size="2xl"
+                  size={{ base: "lg", md: "xl", lg: "2xl" }}
                   letterSpacing="-0.04em"
                   fontWeight={900}
                   color="white"
@@ -161,7 +175,7 @@ export default function Home() {
               {/* Add Task */}
               <Box
                 bg="whiteAlpha.50"
-                p={4}
+                p={{ base: 3, md: 4 }}
                 borderRadius="2xl"
                 border="1px solid"
                 borderColor="whiteAlpha.100"
@@ -177,9 +191,11 @@ export default function Home() {
                       bg="transparent"
                       border="1px solid"
                       borderColor="whiteAlpha.200"
-                      h="55px"
+                      h={{ base: "45px", md: "55px" }}
                       borderRadius="xl"
+                      fontSize={{ base: "sm", md: "md" }}
                       color="white"
+                      isDisabled={isPastDate}
                     />
 
                     <Input
@@ -190,22 +206,30 @@ export default function Home() {
                       bg="transparent"
                       border="1px solid"
                       borderColor="whiteAlpha.200"
-                      h="55px"
+                      h={{ base: "45px", md: "55px" }}
                       borderRadius="xl"
+                      fontSize={{ base: "sm", md: "md" }}
                       color="white"
+                      isDisabled={isPastDate}
                     />
 
                     <Button
                       type="submit"
                       leftIcon={<FiPlus />}
                       w="full"
-                      h="55px"
-                      bg="white"
-                      color="black"
+                      h={{ base: "45px", md: "55px" }}
+                      fontSize={{ base: "xs", md: "sm" }}
+                      bg={isPastDate ? "whiteAlpha.300" : "white"}
+                      color={isPastDate ? "whiteAlpha.500" : "black"}
                       borderRadius="xl"
+                      isDisabled={isPastDate}
+                      _disabled={{ opacity: 0.5, cursor: "not-allowed" }}
+                      title={isPastDate ? "Cannot add tasks for past dates" : ""}
                     >
                       {adding ? (
                         <Spinner size="sm" thickness="4px" color="black" />
+                      ) : isPastDate ? (
+                        "Cannot add task for past date"
                       ) : (
                         "Add Task"
                       )}
@@ -219,7 +243,12 @@ export default function Home() {
                 selectedDate={selectedDate}
                 setTasks={setTasks}
                 tasks={tasks}
+                tasksCount={tasksCount}
+                setTasksCount={setTasksCount}
               />
+
+              {/* MONTHLY SUMMARY CHART */}
+              <MonthStatus />
 
             </VStack>
           </Box>
@@ -227,15 +256,16 @@ export default function Home() {
           {/* RIGHT SIDE CALENDAR */}
           <Box
             flex="1"
-            position="sticky"
-            top="100px"
+            w={{ base: "100%", lg: "auto" }}
+            position={{ base: "relative", lg: "sticky" }}
+            top={{ base: "0", lg: "100px" }}
             bg="rgba(255,255,255,0.03)"
             border="1px solid rgba(255,255,255,0.08)"
-            p={5}
+            p={{ base: 4, md: 5 }}
             borderRadius="24px"
             backdropFilter="blur(20px)"
           >
-            <Heading size="md" mb={5} color="blue">
+            <Heading size={{ base: "sm", md: "md" }} mb={{ base: 3, md: 5 }} color="blue">
               Calendar
             </Heading>
 
