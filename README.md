@@ -1,6 +1,6 @@
-# TaskManager
+# Task Manager
 
-TaskManager is a robust, full-stack task management application. It provides a modern, high-tech user interface for users to manage their daily tasks along with a secure, reliable backend API.
+Task Manager is a robust, full-stack task management application built by **vedantvermajsx**. It provides a modern, high-tech user interface for users to manage their daily tasks along with a secure, reliable backend API.
 
 ## Project Structure
 
@@ -11,41 +11,95 @@ The project is structured as a monorepo containing both the frontend and backend
 
 ### Backend Structure
 
-- `controller/`: Business logic for request handling.
-- `middleware/`: Custom middleware (e.g., authentication).
-- `models/`: MongoDB schema definitions.
-- `routes/`: API endpoint definitions.
-- `utils/`: Helper utilities (e.g., JWT token generation).
-- `index.js`: Application entry point.
+- **controller/**: Business logic for handling requests
+- **middleware/**: Custom middleware (auth, logging, file upload)
+- **models/**: MongoDB schema definitions (User, Task, OTP, response formatters)
+- **routes/**: API endpoint definitions
+- **utils/**: Helper utilities (database, JWT, bcrypt, Cloudinary, EmailJS, OTP)
+- `index.js`: Application entry point
 
 ### Frontend Structure
 
-- `src/api/`: API integration and request handling.
-- `src/components/`: Reusable React UI components.
-- `src/contexts/`: React Context providers for global state.
-- `src/routes/`: Application views/pages.
-- `src/models/`: Frontend data models or type definitions.
-- `src/App.jsx` & `src/main.jsx`: React entry points and routing setup.
+- **src/api/**: API integration and request handling
+  - `Api.js`: Base API configuration
+  - `AuthApi.js`: Authentication API calls
+  - `TaskApi.js`: Task management API calls
+- **src/components/**: Reusable React UI components and pages
+  - `Home.jsx`: Main dashboard (task management, calendar, stats)
+  - `Login.jsx`: Login page
+  - `Register.jsx`: Register page
+  - `ForgotPassword.jsx`: Password reset page
+  - `Profile.jsx`: User profile page
+  - `Task.jsx`: Single task component
+  - `TaskList.jsx`: Task list component
+  - `MonthStatus.jsx`: Month-wise task statistics with charts
+  - `StatCard.jsx`: Statistics card component
+  - `GradientBackground.jsx`: Animated gradient background
+  - `MyToaster.jsx`: Toast notification utility
+- **src/contexts/**: React Context providers for global state
+  - `AuthContext.jsx`: Authentication state management
+- **src/routes/**: Route protection and management
+  - `ProtectedRoute.jsx`: Protected route wrapper (requires authentication)
+- **src/models/**: Frontend data models or type definitions
+  - `LoginRequest.js`: Login request model
+  - `ResisterRequest.js`: Register request model
+  - `TaskRequest.js`: Task creation request model
+  - `PasswordRequest.js`: Password reset request model
+  - `Task.js`: Task model
+- `src/App.jsx` & `src/main.jsx`: React entry points and routing setup
 
 
 ## Tech Stack
 
 ### Frontend
-- React 19
-- Vite
-- Tailwind CSS & PostCSS
-- Framer Motion (Animations)
-- React Three Fiber / Drei (3D graphics and shaders)
-- Chakra UI
-- Axios
-- React Router DOM
+- **React 19** - UI library
+- **Vite** - Build tool & dev server
+- **Tailwind CSS & PostCSS** - Styling
+- **Framer Motion** - Animations
+- **React Three Fiber / Drei** - 3D graphics and shaders
+- **Chakra UI** - Component library
+- **Axios** - HTTP client
+- **React Router DOM** - Routing
+- **React Hot Toast** - Notifications
+- **React Calendar** - Date picker
+- **React Icons** - Icons
+- **Recharts** - Charts
+- **Three.js** - 3D graphics
 
 ### Backend
-- Node.js
-- Express
-- MongoDB (via Mongoose)
-- JSON Web Token (JWT) (Authentication)
-- Bcrypt (Password Hashing)
+- **Node.js** - Runtime
+- **Express** - Web framework
+- **MongoDB (via Mongoose)** - Database & ORM
+- **JSON Web Token (JWT)** - Authentication
+- **Bcrypt** - Password hashing
+- **CORS** - Cross-origin resource sharing
+- **Cookie Parser** - Cookie handling
+- **Dotenv** - Environment variables
+- **Multer** - File upload handling
+- **Cloudinary** - Cloud storage for files/avatars
+- **EmailJS (@emailjs/nodejs)** - Email sending (OTP, password reset)
+- **Nodemon** - Dev server reload
+
+## Features
+
+### Backend Features
+- User authentication (register/login/logout)
+- Password reset with OTP verification
+- Profile picture upload (Cloudinary)
+- Task CRUD operations (create, read, update, delete)
+- Secure API endpoints with JWT middleware
+- Request interceptor logging
+- CORS configuration for frontend communication
+
+### Frontend Features
+- Modern animated UI with gradients & 3D elements
+- Responsive design
+- User profile page
+- Calendar for date selection
+- Task management dashboard
+- Month-wise task statistics with charts
+- Toast notifications
+- Protected routes (authentication required)
 
 ## Setup and Installation
 
@@ -94,3 +148,7 @@ The project is structured as a monorepo containing both the frontend and backend
 - Creating, reading, updating, and deleting tasks.
 - Advanced animated UI and responsive layout using modern React libraries.
 - Secure API endpoints wrapped with authentication middleware.
+
+## Developer
+
+This project is developed and maintained by **vedantvermajsx**.

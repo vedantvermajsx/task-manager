@@ -1,7 +1,9 @@
 {
-  "name": "frontend",
+  "name": "task-manager-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Task Manager Frontend - Modern task management UI by vedantvermajsx",
+  "author": "vedantvermajsx",
   "type": "module",
   "scripts": {
     "dev": "vite",

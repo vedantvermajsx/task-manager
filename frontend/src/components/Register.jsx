@@ -44,6 +44,9 @@ export default function Register() {
       if (form.name.length < 2) {
         MyToaster.warning("Name must be at least 2 characters long", "error");
       }
+      if (!isEmailValid(form.name)) {
+        MyToaster.warning("Enter correct name");
+      }
       if (!isEmailValid) {
         MyToaster.warning("Enter correct email address");
       }

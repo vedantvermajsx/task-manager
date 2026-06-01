@@ -1,7 +1,7 @@
 {
-  "name": "deployement",
+  "name": "task-manager",
   "version": "1.0.0",
-  "description": "helps to deploy the project",
+  "description": "Task Manager - A robust, full-stack task management application",
   "homepage": "https://github.com/vedantvermajsx/task-manager#readme",
   "bugs": {
     "url": "https://github.com/vedantvermajsx/task-manager/issues"
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/vedantvermajsx/task-manager.git"
   },
   "license": "ISC",
-  "author": "",
+  "author": "vedantvermajsx",
   "type": "commonjs",
   "main": "index.js",
   "scripts": {

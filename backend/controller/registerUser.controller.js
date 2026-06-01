@@ -29,6 +29,13 @@ async function registerUser(req,res){
             });
         }
 
+        if(verifyEmail(name)){
+            return res.status(400).json({
+                success: false,
+                message: "Invalid name"
+            });
+        }
+
         if(password.length<8){
             return res.status(400).json({
                 success: false,

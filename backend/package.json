@@ -1,9 +1,9 @@
 {
-  "name": "node",
+  "name": "task-manager-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Task Manager Backend - RESTful API for task management by vedantvermajsx",
   "license": "ISC",
-  "author": "",
+  "author": "vedantvermajsx",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
-  "keywords": [],
+  "keywords": ["task-manager", "todo", "productivity", "api", "vedantvermajsx"],
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@emailjs/nodejs": "^5.0.2",
