@@ -17,6 +17,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
+console.log(__filename);
+
 
 dotenv.config();
 
@@ -26,10 +28,9 @@ const PORT=process.env.PORT || 4040;
 
 const app=express();
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://localhost:5174"
-    ],
+    origin: ["*"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }));
 

@@ -9,6 +9,10 @@ class Api {
             },
             withCredentials:true,
         });
+         this.defaultError={
+            success:false,
+            message:"Some error occurred while processing your request"
+        }
     }
 }
 

@@ -11,6 +11,9 @@ class TaskApi extends Api {
             const response = await this.axios.get("/task/getTasks", {
                 params: { page, size,date }
             });
+            if(!response){
+                return this.defaultError;
+            }
 
             this.page++;
             return response.data;
@@ -24,6 +27,9 @@ class TaskApi extends Api {
             const response = await this.axios.get("/task/getTasks", {
                 params: { all: 'true' }
             });
+            if(!response){
+                return this.defaultError;
+            }
             return response.data;
 
         } catch (error) {
@@ -34,6 +40,9 @@ class TaskApi extends Api {
     async createTask(task) {
         try {
             const response = await this.axios.post("/task/addTask", task);
+            if(!response){
+                return this.defaultError;
+            }
             return response.data;
         } catch (error) {
            return error.response.data;
@@ -43,6 +52,9 @@ class TaskApi extends Api {
     async updateTask(id,task) {
         try {
             const response = await this.axios.put(`/task/updateTask/${id}`, task);
+            if(!response){
+                return this.defaultError;
+            }
             return response.data;
         } catch (error) {
            return error.response.data;
@@ -52,6 +64,9 @@ class TaskApi extends Api {
     async deleteTask(id) {
         try {
             const response = await this.axios.delete(`/task/deleteTask/${id}`);
+            if(!response){
+                return this.defaultError;
+            }
             return response.data;
         } catch (error) {
            return error.response.data;
