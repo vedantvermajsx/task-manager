@@ -35,7 +35,6 @@ class AuthApi extends Api {
     async login(loginRequest) {
         try{
             const response = await this.axios.post("/auth/login", loginRequest);
-            console.log(response);
             if(!response){
                 return this.defaultError;
             }
