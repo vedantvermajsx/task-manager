@@ -18,8 +18,6 @@ import {
   FiCamera
 } from "react-icons/fi";
 import AuthApi from "../api/AuthApi";
-import StatCard from "./StatCard";
-import MyToaster from "./MyToaster";
 
 import { AuthContext } from "../contexts/AuthContext";
 import MonthStatus from "./MonthStatus";
@@ -33,11 +31,9 @@ export default function Profile() {
       const response = await AuthApi.logout();
       if (response.success) {
         window.location.href = "/";
-      } else {
-        MyToaster.warning(response.message || "Logout failed");
       }
     } catch (error) {
-      MyToaster.error(error?.response?.data?.message || error.message || "Logout failed");
+      MyToaster.error(error?.response?.data?.message || error.message || "Failed to logout", "error");
     }
   };
 
@@ -58,7 +54,6 @@ export default function Profile() {
   const fileInputRef = useRef(null);
 
 
-
   useEffect(() => {
     const fetchProfile = async () => {
       if (user) {
@@ -77,10 +72,7 @@ export default function Profile() {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (!file) {
-      MyToaster.error("Please select a file", "error");
-      return;
-    }
+    if (!file) return;
 
     try {
       setIsUploading(true);
@@ -89,11 +81,9 @@ export default function Profile() {
 
       if (data.success) {
         setEditAvatarUrl(data.url);
-      } else {
-        MyToaster.error(data.message || "Profile picture update failed");
       }
     } catch (err) {
-      MyToaster.error(err?.response?.data?.message || err.message || "Profile picture update failed");
+      alert(err.response.data.message);
     } finally {
       setIsUploading(false);
     }
@@ -121,11 +111,11 @@ export default function Profile() {
 
         setUser(updated);
         setIsEditing(false);
-      } else {
-        MyToaster.warning(response.message || "Profile update failed");
+      }else{
+        MyToaster.warn(response.message || "Failed to update profile", "error");
       }
     } catch (error) {
-      MyToaster.error(error?.response?.data?.message || error.message || "Profile update failed");
+      MyToaster.error(error?.response?.data?.message || error.message || "Failed to update profile", "error");
     } finally {
       setIsSaving(false);
     }
@@ -148,44 +138,15 @@ export default function Profile() {
   }
 
   return (
-    <Box
-      minH="100vh"
-      color="white"
-      py={10}
+    <Box 
+      minH="100vh" 
+      bg="#0a0a0a"
+      color="white" 
+      py={10} 
       px={4}
-      position="relative"
-      overflow="hidden"
-
     >
-
-      {user?.avatar && (
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          right={0}
-          bottom={0}
-          backgroundImage={`url(${user.avatar})`}
-          backgroundSize="cover"
-          backgroundPosition="center"
-          backgroundRepeat="no-repeat"
-          opacity="1"
-          filter="blur(4px)"
-          zIndex={0}
-        />
-      )}
-
-      <Box
-        position="absolute"
-        top={0}
-        left={0}
-        right={0}
-        bottom={0}
-        bg="#0a0a0a"
-        opacity="0.85"
-        zIndex={0}
-      />
-      <Container maxW="6xl" position="relative" zIndex={1}>
+      <Container maxW="6xl">
+        {/* Navbar */}
         <Flex justify="space-between" align="center" mb={10}>
           <Button
             leftIcon={<FiArrowLeft />}
@@ -214,20 +175,51 @@ export default function Profile() {
           </Button>
         </Flex>
 
+        {/* Profile Card */}
         <Box
+          position="relative"
+          rounded="3xl"
+          overflow="hidden"
           border="1px solid"
           borderColor="whiteAlpha.100"
-          rounded="3xl"
           p={{ base: 8, md: 12 }}
           mb={10}
           boxShadow="0 0 40px rgba(0,0,0,0.5)"
-          opacity="0.5"
         >
+          {/* Profile Card Background Image */}
+          {user?.avatar && (
+            <Box
+              position="absolute"
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              backgroundImage={`url(${user.avatar})`}
+              backgroundSize="cover"
+              backgroundPosition="center"
+              backgroundRepeat="no-repeat"
+              opacity="0.15"
+              filter="blur(20px)"
+              zIndex={0}
+            />
+          )}
+          {/* Profile Card Dark Overlay */}
+          <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            bg="#111111"
+            opacity="0.9"
+            zIndex={0}
+          />
           <Flex
             direction={{ base: "column", md: "row" }}
             align="center"
             gap={10}
             position="relative"
+            zIndex={1}
           >
             {!isEditing && (
               <Button
@@ -412,8 +404,46 @@ export default function Profile() {
           />
         </SimpleGrid>
 
-        <MonthStatus />
+        <MonthStatus isStatic={true} />
       </Container>
+    </Box>
+  );
+}
+
+function StatCard({ title, value, icon, color }) {
+  return (
+    <Box
+      bg="#111111"
+      border="1px solid"
+      borderColor="whiteAlpha.100"
+      rounded="2xl"
+      p={7}
+      boxShadow="0 0 30px rgba(0,0,0,0.35)"
+      transition="0.2s ease"
+      _hover={{
+        borderColor: "whiteAlpha.300",
+      }}
+    >
+      <Flex justify="space-between" align="center" mb={6}>
+        <Text color="whiteAlpha.700" fontWeight="600">
+          {title}
+        </Text>
+
+        <Flex
+          w="50px"
+          h="50px"
+          align="center"
+          justify="center"
+          rounded="xl"
+          bg={`${color}20`}
+        >
+          <Icon as={icon} color={color} boxSize={5} />
+        </Flex>
+      </Flex>
+
+      <Heading size="3xl" fontWeight="800" color="white">
+        {value}
+      </Heading>
     </Box>
   );
 }

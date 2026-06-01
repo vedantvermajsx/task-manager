@@ -15,7 +15,7 @@ class TaskApi extends Api {
             this.page++;
             return response.data;
         } catch (error) {
-            console.error("Error fetching tasks:", error.response.data.message);
+            return error.response.data;
         }
     }
 
@@ -27,7 +27,7 @@ class TaskApi extends Api {
             return response.data;
 
         } catch (error) {
-            console.error("Error fetching all tasks:", error);
+            return error.response.data;
         }
     }
 
@@ -36,7 +36,7 @@ class TaskApi extends Api {
             const response = await this.axios.post("/task/addTask", task);
             return response.data;
         } catch (error) {
-            console.error("Error creating task:", error);
+           return error.response.data;
         }
     }
 
@@ -45,7 +45,7 @@ class TaskApi extends Api {
             const response = await this.axios.put(`/task/updateTask/${id}`, task);
             return response.data;
         } catch (error) {
-            console.error(`Error updating task ${task.id}:`, error);
+           return error.response.data;
         }
     }
 
@@ -54,7 +54,7 @@ class TaskApi extends Api {
             const response = await this.axios.delete(`/task/deleteTask/${id}`);
             return response.data;
         } catch (error) {
-            console.error(`Error deleting task ${id}:`, error);
+           return error.response.data;
         }
     }
 

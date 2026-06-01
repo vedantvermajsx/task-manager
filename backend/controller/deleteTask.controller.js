@@ -39,7 +39,7 @@ async function deleteTask(req,res){
         }
 
 
-        res.status(200).json({success:true,message:"Task deleted successfully",user});
+        res.status(200).json({success:true,message:"Task deleted successfully",deletedTask});
     } catch (error) {
         res.status(500).json({success:false,message:error.message});
     }

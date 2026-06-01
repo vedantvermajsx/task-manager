@@ -19,7 +19,7 @@ import "react-calendar/dist/Calendar.css";
 import { useNavigate } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 import TaskList from "./TaskList";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskApi from "../api/TaskApi";
 import MonthStatus from "./MonthStatus";
 
@@ -36,6 +36,8 @@ export default function Home() {
 
 
   const [tasks, setTasks] = useState([]);
+  const [allTasks, setAllTasks] = useState([]);
+  const [allTasksLoading, setAllTasksLoading] = useState(true);
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [adding, setAdding] = useState(false);
@@ -47,6 +49,26 @@ export default function Home() {
   const selected = new Date(selectedDate);
   selected.setHours(0, 0, 0, 0);
   const isPastDate = selected < today;
+
+  // Fetch all tasks once for MonthStatus
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const response = await TaskApi.getAllTasks();
+        if (response.success) {
+          setAllTasks(response.ResponseTasks || []);
+        }else{
+          MyToaster.warning(response.message || "Failed to fetch tasks");
+        }
+      } catch (err) {
+        MyToaster.error(err?.response?.data?.message || err.message || "Failed to fetch tasks");
+      } finally {
+        setAllTasksLoading(false);
+      }
+    };
+
+    fetchAll();
+  }, []);
 
   const addTask = async (e) => {
     e.preventDefault();
@@ -63,7 +85,9 @@ export default function Home() {
       const response = await TaskApi.createTask(newTask);
 
       if (response.success) {
-        setTasks((prev) => [...prev, response.ResponseTask]);
+        const createdTask = response.ResponseTask;
+        setTasks((prev) => [...prev, createdTask]);
+        setAllTasks((prev) => [...prev, createdTask]);
         setTasksCount((prev) => prev + 1);
         setTaskTitle("");
         setTaskDescription("");
@@ -88,7 +112,7 @@ export default function Home() {
         window.location.href = "/";
       }
     } catch (error) {
-      console.error("Failed to logout:", error);
+      MyToaster.error(error?.response?.data?.message || error.message || "Failed to logout", "error");
     }
   };
 
@@ -248,10 +272,12 @@ export default function Home() {
                 tasks={tasks}
                 tasksCount={tasksCount}
                 setTasksCount={setTasksCount}
+                allTasks={allTasks}
+                setAllTasks={setAllTasks}
               />
 
               {/* MONTHLY SUMMARY CHART */}
-              <MonthStatus />
+              <MonthStatus allTasks={allTasks} loading={allTasksLoading} />
 
             </VStack>
           </Box>

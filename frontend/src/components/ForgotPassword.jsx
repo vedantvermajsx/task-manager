@@ -65,7 +65,6 @@ export default function ForgotPassword() {
         MyToaster.warn(response.message || "Failed to send OTP", "error");
       }
     } catch (err) {
-      console.log(err?.response?.data?.message);
       MyToaster.error(err?.response?.data?.message || "Failed to send OTP", "error");
     }
 
@@ -93,7 +92,6 @@ export default function ForgotPassword() {
         MyToaster.warn(data.message || "Failed to verify OTP", "error");
       }
     } catch (err) {
-      console.log(err?.response?.data?.message);
       MyToaster.error(err?.response?.data?.message || "Invalid OTP", "error");
     }
 

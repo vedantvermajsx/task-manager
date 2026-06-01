@@ -3,8 +3,9 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import TaskApi from "../api/TaskApi";
 
 const SCROLLABLE_MAX_HEIGHT = "700px";
+import MyToaster from "./MyToaster";
 
-const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount }) => {
+const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, allTasks, setAllTasks }) => {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
 
@@ -30,16 +31,22 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount }) 
                     setHasMore(false);
                 } else {
                     setTasks(prev => [...prev, ...newTasks]);
+                    // Add new tasks to allTasks if not already present
+                    setAllTasks(prev => {
+                        const existingIds = new Set(prev.map(t => t._id));
+                        const tasksToAdd = newTasks.filter(t => !existingIds.has(t._id));
+                        return [...prev, ...tasksToAdd];
+                    });
                     setTasksCount(fetchedTasks.totalTasks);
                 }
             }
         } catch (err) {
-            console.error(err);
+            MyToaster.error(err?.response?.data?.message || err.message || "Failed to fetch tasks", "error");
         } finally {
             loadingRef.current = false;
             setLoading(false);
         }
-    }, [selectedDate, setTasks]);
+    }, [selectedDate, setTasks, setAllTasks]);
 
 
     useEffect(() => {
@@ -74,10 +81,11 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount }) 
 
             if (response.success) {
                 setTasks((prev) => prev.filter((t) => t._id !== id));
+                setAllTasks((prev) => prev.filter((t) => t._id !== id));
                 setTasksCount(prev => prev - 1);
             }
         } catch (error) {
-            console.error("Error deleting task:", error);
+            MyToaster.error(error?.response?.data?.message || error.message || "Failed to delete task", "error");
         }
     };
 
@@ -93,16 +101,24 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount }) 
             const response = await TaskApi.updateTask(id, updatedTask);
 
             if (response.success) {
+                const newTaskData = { ...task, completed: updatedTask.completed };
                 setTasks((prev) =>
                     prev.map((t) =>
                         t._id === id
-                            ? { ...t, completed: updatedTask.completed }
+                            ? newTaskData
+                            : t
+                    )
+                );
+                setAllTasks((prev) =>
+                    prev.map((t) =>
+                        t._id === id
+                            ? newTaskData
                             : t
                     )
                 );
             }
         } catch (error) {
-            console.error("Error updating task:", error);
+            MyToaster.error(error?.response?.data?.message || error.message || "Failed to update task", "error");
         }
     };
 
@@ -110,12 +126,16 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount }) 
         try {
             const response = await TaskApi.updateTask(id, updatedData);
             if (response.success) {
+                const newTaskData = { ...tasks.find((t) => t._id === id), ...updatedData };
                 setTasks((prev) =>
-                    prev.map((t) => (t._id === id ? { ...t, ...updatedData } : t))
+                    prev.map((t) => (t._id === id ? newTaskData : t))
+                );
+                setAllTasks((prev) =>
+                    prev.map((t) => (t._id === id ? newTaskData : t))
                 );
             }
         } catch (error) {
-            console.error("Error editing task:", error);
+            MyToaster.error(error?.response?.data?.message || error.message || "Failed to update task", "error");
         }
     };
 

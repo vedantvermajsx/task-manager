@@ -32,7 +32,6 @@ const Task = ({
     const [editTitle, setEditTitle] = useState(title);
     const [editDesc, setEditDesc] = useState(description);
 
-    // Capture current time once on mount to determine failed status
     const [mountTime] = useState(() => Date.now());
     const isFailed = createdAt && !completed
         ? (mountTime - new Date(createdAt).getTime()) / (1000 * 60 * 60) >= 24
