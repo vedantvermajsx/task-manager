@@ -10,10 +10,9 @@ import {
     Text,
     Heading,
     Divider,
-    Alert,
-    AlertIcon,
     Spinner,
 } from "@chakra-ui/react";
+import MyToaster from "./MyToaster.jsx";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import AuthApi from "../api/AuthApi.js";
@@ -26,13 +25,10 @@ export default function Login() {
 
     const [showPwd, setShowPwd] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
     const [form, setForm] = useState({ email: "", password: "" });
-    const [isButtonVisible, setIsButtonVisible] = useState(true);
 
     const handleChange = (e) => {
         setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
-        setIsButtonVisible(true);
     };
 
     const isEmailValid = (email) => /\S+@\S+\.\S+/.test(email);
@@ -41,36 +37,36 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!isFormValid) {
-            setIsButtonVisible(false);
+        if (!isEmailValid(form.email)) {
+            MyToaster.warning("Please enter a valid email");
+            return;
+        }
+        if (form.password.length < 6) {
+            MyToaster.warning("Please enter a password of at least 6 characters");
             return;
         }
 
-        setError("");
+
         setLoading(true);
 
         try {
             const request = new LoginRequest(form.email, form.password);
             const data = await AuthApi.login(request);
             if (data.success) {
+                MyToaster.success(data.message);
                 navigate("/");
+            } else {
+                MyToaster.warning(data.message);
             }
         } catch (err) {
-            setError(err?.response?.data?.message || err.message || "Login failed");
+            MyToaster.error(err?.response?.data?.message || err.message || "Login failed");
         } finally {
             setLoading(false);
         }
     };
 
-    const handleDisabledClick = () => {
-        if (!isFormValid) {
-            setIsButtonVisible(false);
-        }
-    };
-
     return (
         <div className="min-h-screen flex items-center justify-center px-4 overflow-hidden relative">
-            {/* Decorative Clipped Shapes */}
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-500/5 blur-[100px] clip-abstract" />
             <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent-500/5 blur-[100px] clip-shape" />
 
@@ -97,12 +93,6 @@ export default function Login() {
                         </Text>
                     </div>
 
-                    {error && (
-                        <Alert status="error" borderRadius="xl" mb={6} variant="subtle" bg="red.900/20" color="red.200" fontSize="sm">
-                            <AlertIcon color="red.400" />
-                            {error}
-                        </Alert>
-                    )}
 
                     <form onSubmit={handleSubmit} className="space-y-6 relative max-w-sm mx-auto">
                         <FormControl>
@@ -171,42 +161,39 @@ export default function Login() {
                         </div>
 
                         <AnimatePresence>
-                            {isButtonVisible && (
-                                <motion.div
-                                    initial={{ height: "auto", opacity: 1 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0, marginTop: 0, marginBottom: 0 }}
-                                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                                    onClick={handleDisabledClick}
-                                    style={{ overflow: "hidden" }}
+                            <motion.div
+                                initial={{ height: "auto", opacity: 1 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0, marginTop: 0, marginBottom: 0 }}
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                                style={{ overflow: "hidden" }}
+                            >
+                                <Button
+                                    type="submit"
+                                    width="full"
+                                    size="lg"
+                                    h="65px"
+                                    bg={"white"}
+                                    _hover={{
+                                        bg: isFormValid ? "whiteAlpha.900" : "white"
+                                    }}
+                                    _active={{ transform: "translateY(0)" }}
+                                    _disabled={{
+                                        opacity: 0.3,
+                                        bg: "whiteAlpha.400"
+                                    }}
+                                    color="black"
+                                    borderRadius="xl"
+                                    fontWeight="900"
+                                    fontSize="sm"
+                                    textTransform="uppercase"
+                                    letterSpacing="0.3em"
+                                    transition="all 0.3s ease"
+                                    isDisabled={loading}
                                 >
-                                    <Button
-                                        type="submit"
-                                        width="full"
-                                        size="lg"
-                                        h="65px"
-                                        bg={"white"}
-                                        _hover={{
-                                            bg: isFormValid ? "whiteAlpha.900" : "white"
-                                        }}
-                                        _active={{ transform: "translateY(0)" }}
-                                        _disabled={{
-                                            opacity: 0.3,
-                                            bg: "whiteAlpha.400"
-                                        }}
-                                        color="black"
-                                        borderRadius="xl"
-                                        fontWeight="900"
-                                        fontSize="sm"
-                                        textTransform="uppercase"
-                                        letterSpacing="0.3em"
-                                        transition="all 0.3s ease"
-                                        isDisabled={loading}
-                                    >
-                                        {loading ? <Spinner size="sm" thickness="4px" color="black" /> : "Sign In"}
-                                    </Button>
-                                </motion.div>
-                            )}
+                                    {loading ? <Spinner size="sm" thickness="4px" color="black" /> : "Sign In"}
+                                </Button>
+                            </motion.div>
                         </AnimatePresence>
                     </form>
 

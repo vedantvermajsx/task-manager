@@ -9,14 +9,13 @@ import {
   InputRightElement,
   Text,
   Heading,
-  Alert,
-  AlertIcon,
   Spinner,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import AuthApi from "../api/AuthApi.js";
 import RegisterRequest from "../models/ResisterRequest.js";
+import MyToaster from "./MyToaster.jsx";
 
 const MotionBox = motion(Box);
 
@@ -24,7 +23,6 @@ export default function Register() {
   const navigate = useNavigate();
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -43,13 +41,18 @@ export default function Register() {
     e.preventDefault();
 
     if (!isFormValid) {
-      if (!isEmailValid) setError("Enter correct email address");
-      if (form.name.length < 2) setError("Name must be at least 2 characters long");
-      if (form.password.length < 8) setError("Password must be at least 8 characters long");
+      if (form.name.length < 2) {
+        MyToaster.warning("Name must be at least 2 characters long", "error");
+      }
+      if (!isEmailValid) {
+        MyToaster.warning("Enter correct email address");
+      }
+      if (form.password.length < 8) {
+        MyToaster.warning("Password must be at least 8 characters long");
+      }
       return;
     }
 
-    setError("");
     setLoading(true);
 
     try {
@@ -57,10 +60,13 @@ export default function Register() {
       const data = await AuthApi.register(request);
 
       if (data.success) {
+        MyToaster.success(data.message || "Registeration successful");
         navigate("/login");
+      } else {
+        MyToaster.warning(data.message || "Registeration failed");
       }
     } catch (err) {
-      setError(err?.response?.data?.message || err.message || "Registeration failed");
+      MyToaster.error(err?.response?.data?.message || err.message || "Registeration failed");
     } finally {
       setLoading(false);
     }
@@ -105,13 +111,6 @@ export default function Register() {
               Join Task Manager System
             </Text>
           </div>
-
-          {error && (
-            <Alert status="error" borderRadius="xl" mb={6} variant="subtle" bg="red.900/20" color="red.200" fontSize="sm">
-              <AlertIcon color="red.400" />
-              {error}
-            </Alert>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-6 relative max-w-sm mx-auto">
             <FormControl>

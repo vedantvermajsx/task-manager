@@ -27,6 +27,7 @@ import TaskRequest from "../models/TaskRequest.js";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { useContext } from "react";
 import AuthApi from "../api/AuthApi.js";
+import MyToaster from "./MyToaster";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -66,9 +67,11 @@ export default function Home() {
         setTasksCount((prev) => prev + 1);
         setTaskTitle("");
         setTaskDescription("");
+      } else {
+        MyToaster.error(response.message || "Failed to add task", "error");
       }
     } catch (error) {
-      console.error("Failed to add task:", error);
+      MyToaster.error(error?.response?.data?.message || error.message || "Failed to add task", "error");
     } finally {
       setAdding(false);
     }

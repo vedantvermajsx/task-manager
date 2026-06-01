@@ -2,8 +2,7 @@ import { useState, useEffect, useContext, useRef } from "react";
 import {
   Box, Container, Stack, Flex, Avatar,
   Heading,
-  Text, Button, SimpleGrid, Stat,
-  StatNumber, Badge, Icon,
+  Text, Button, SimpleGrid, Badge, Icon,
   Input, Textarea, HStack, Spinner
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +18,8 @@ import {
   FiCamera
 } from "react-icons/fi";
 import AuthApi from "../api/AuthApi";
+import StatCard from "./StatCard";
+import MyToaster from "./MyToaster";
 
 import { AuthContext } from "../contexts/AuthContext";
 import MonthStatus from "./MonthStatus";
@@ -32,9 +33,11 @@ export default function Profile() {
       const response = await AuthApi.logout();
       if (response.success) {
         window.location.href = "/";
+      } else {
+        MyToaster.warning(response.message || "Logout failed");
       }
     } catch (error) {
-      console.error("Failed to logout:", error);
+      MyToaster.error(error?.response?.data?.message || error.message || "Logout failed");
     }
   };
 
@@ -74,7 +77,10 @@ export default function Profile() {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    if (!file) {
+      MyToaster.error("Please select a file", "error");
+      return;
+    }
 
     try {
       setIsUploading(true);
@@ -83,9 +89,11 @@ export default function Profile() {
 
       if (data.success) {
         setEditAvatarUrl(data.url);
+      } else {
+        MyToaster.error(data.message || "Profile picture update failed");
       }
     } catch (err) {
-      alert(err.response.data.message);
+      MyToaster.error(err?.response?.data?.message || err.message || "Profile picture update failed");
     } finally {
       setIsUploading(false);
     }
@@ -113,9 +121,11 @@ export default function Profile() {
 
         setUser(updated);
         setIsEditing(false);
+      } else {
+        MyToaster.warning(response.message || "Profile update failed");
       }
     } catch (error) {
-      console.error("Failed to update profile", error);
+      MyToaster.error(error?.response?.data?.message || error.message || "Profile update failed");
     } finally {
       setIsSaving(false);
     }
@@ -138,9 +148,44 @@ export default function Profile() {
   }
 
   return (
-    <Box minH="100vh" bg="#0a0a0a" color="white" py={10} px={4}>
-      <Container maxW="6xl">
-        {/* Navbar */}
+    <Box
+      minH="100vh"
+      color="white"
+      py={10}
+      px={4}
+      position="relative"
+      overflow="hidden"
+
+    >
+
+      {user?.avatar && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          backgroundImage={`url(${user.avatar})`}
+          backgroundSize="cover"
+          backgroundPosition="center"
+          backgroundRepeat="no-repeat"
+          opacity="1"
+          filter="blur(4px)"
+          zIndex={0}
+        />
+      )}
+
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        bg="#0a0a0a"
+        opacity="0.85"
+        zIndex={0}
+      />
+      <Container maxW="6xl" position="relative" zIndex={1}>
         <Flex justify="space-between" align="center" mb={10}>
           <Button
             leftIcon={<FiArrowLeft />}
@@ -169,15 +214,14 @@ export default function Profile() {
           </Button>
         </Flex>
 
-        {/* Profile Card */}
         <Box
-          bg="#111111"
           border="1px solid"
           borderColor="whiteAlpha.100"
           rounded="3xl"
           p={{ base: 8, md: 12 }}
           mb={10}
           boxShadow="0 0 40px rgba(0,0,0,0.5)"
+          opacity="0.5"
         >
           <Flex
             direction={{ base: "column", md: "row" }}
@@ -370,46 +414,6 @@ export default function Profile() {
 
         <MonthStatus />
       </Container>
-    </Box>
-  );
-}
-
-function StatCard({ title, value, icon, color }) {
-  return (
-    <Box
-      bg="#111111"
-      border="1px solid"
-      borderColor="whiteAlpha.100"
-      rounded="2xl"
-      p={7}
-      boxShadow="0 0 30px rgba(0,0,0,0.35)"
-      transition="0.2s ease"
-      _hover={{
-        borderColor: "whiteAlpha.300",
-      }}
-    >
-      <Flex justify="space-between" align="center" mb={6}>
-        <Text color="whiteAlpha.700" fontWeight="600">
-          {title}
-        </Text>
-
-        <Flex
-          w="50px"
-          h="50px"
-          align="center"
-          justify="center"
-          rounded="xl"
-          bg={`${color}20`}
-        >
-          <Icon as={icon} color={color} boxSize={5} />
-        </Flex>
-      </Flex>
-
-      <Stat p={0}>
-        <StatNumber fontSize="5xl" fontWeight="800" color="white">
-          {value}
-        </StatNumber>
-      </Stat>
     </Box>
   );
 }

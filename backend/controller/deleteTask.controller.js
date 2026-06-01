@@ -26,20 +26,20 @@ async function deleteTask(req,res){
             return res.status(403).json({success:false,message:"Task has expired after 24 hours and is now failed. Cannot delete."});
         }
 
-        await Task.findByIdAndDelete(id);
+        const deletedTask=await Task.findByIdAndDelete(id);
 
         await User.findByIdAndUpdate(userId, {
             $inc: { totalTasks: -1 }
         });
 
-        if(task.completed){
+        if(deletedTask.completed){
             await User.findByIdAndUpdate(userId, {
-                $inc: { totalCompletedTasks: -1 }
+                $inc: { completedTasks: -1 }
             });
         }
-        
 
-        res.status(200).json({success:true,message:"Task deleted successfully"});
+
+        res.status(200).json({success:true,message:"Task deleted successfully",user});
     } catch (error) {
         res.status(500).json({success:false,message:error.message});
     }

@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import './index.css'
 import App from './App.jsx'
+import { Toaster } from 'react-hot-toast'
 
 import { AuthProvider } from "./contexts/AuthContext.jsx";
 
@@ -40,6 +41,7 @@ const theme = extendTheme({
 createRoot(document.getElementById('root')).render(
   <ChakraProvider theme={theme}>
     <AuthProvider>
+      <Toaster />
       <App />
     </AuthProvider>
   </ChakraProvider>

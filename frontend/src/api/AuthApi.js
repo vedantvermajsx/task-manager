@@ -17,8 +17,13 @@ class AuthApi extends Api {
     }
 
     async login(loginRequest) {
+        try{
         const response = await this.axios.post("/auth/login", loginRequest);
-        return response.data;
+            return response.data;
+    }
+        catch(err){
+            return err.response.data;
+        }    
     }
 
     async logout(){
@@ -35,14 +40,13 @@ class AuthApi extends Api {
         const formData = new FormData();
         formData.append("profilePic", file);
 
-        const response=this.axios.put(`/user/update-profile/${id}`, formData, {
+        const response=await this.axios.put(`/user/update-profile/${id}`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
         });
 
-
-        return response;
+        return response.data;
     }
 
     async sendOtp(passwordRequest){

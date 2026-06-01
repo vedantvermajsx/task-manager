@@ -58,6 +58,12 @@ function MonthStatus() {
         };
 
         fetchAllTasks();
+
+        const interval = setInterval(() => {
+            fetchAllTasks();
+        }, 10000);
+
+        return () => clearInterval(interval);
     }, []);
 
     return (

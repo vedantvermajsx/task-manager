@@ -7,6 +7,7 @@ import Profile from "./components/Profile";
 import GradientBackground from "./components/GradientBackground";
 import "./App.css";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import { Toaster } from "react-hot-toast";
 
 function ConditionalBackground() {
   const location = useLocation();
