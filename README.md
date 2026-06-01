@@ -78,6 +78,7 @@ The project is structured as a monorepo containing both the frontend and backend
 - **Multer** - File upload handling
 - **Cloudinary** - Cloud storage for files/avatars
 - **EmailJS (@emailjs/nodejs)** - Email sending (OTP, password reset)
+- **Express Rate Limit** - Rate limiting (30 requests per minute per IP)
 - **Nodemon** - Dev server reload
 
 ## Features
@@ -90,6 +91,7 @@ The project is structured as a monorepo containing both the frontend and backend
 - Secure API endpoints with JWT middleware
 - Request interceptor logging
 - CORS configuration for frontend communication
+- Rate limiting (30 requests per minute per IP using express-rate-limit)
 
 ### Frontend Features
 - Modern animated UI with gradients & 3D elements

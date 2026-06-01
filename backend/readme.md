@@ -1,5 +1,6 @@
 # Task Manager - Backend API
 
+
 This is the backend API for Task Manager, a robust task management application built by **vedantvermajsx**  in collaboration with **yash yadav**. The API provides secure user authentication and comprehensive CRUD operations for tasks.
 
 ## Tech Stack
@@ -14,6 +15,7 @@ This is the backend API for Task Manager, a robust task management application b
 - Server: Node.js with Express framework
 - Database: MongoDB using Mongoose ORM
 - Authentication: JSON Web Token (JWT) and Bcrypt for password hashing
+- Rate Limiting: express-rate-limit (30 requests per minute per IP)
 - File Upload: Multer (memory storage) + Cloudinary (cloud storage)
 - Email Service: EmailJS (@emailjs/nodejs)
 - Other Dependencies: dotenv, cookie-parser, cors, nodemon (development)

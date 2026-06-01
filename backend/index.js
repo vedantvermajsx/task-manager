@@ -38,6 +38,7 @@ app.use(rateLimit(
     {
         windowMs: 1000 * 60,
         max: 30,
+        message: "Too many requests, please try again later",
     }
 ));
 
