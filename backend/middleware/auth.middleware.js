@@ -11,6 +11,7 @@ const JWT_SECRET=process.env.JWT_SECRET;
 
         if (!token) {
             return res.status(401).json({
+                success: false,
                 message: "Unauthorized"
             });
         }
@@ -22,6 +23,7 @@ const JWT_SECRET=process.env.JWT_SECRET;
 
         if(!decodedToken){
             return res.status(401).json({
+                success: false,
                 message: "Unauthorized"
             });
         }
@@ -33,6 +35,7 @@ const JWT_SECRET=process.env.JWT_SECRET;
     } catch (error) {
 
         return res.status(401).json({
+            success: false,
             message: "Invalid or expired token"
         });
     }
