@@ -81,7 +81,7 @@ const Task = ({
                 gap={4}
                 direction={{ base: "column", md: "row" }}
             >
-                {/* Left Content */}
+                {}
                 <VStack align="start" spacing={3} flex={1}>
                     <HStack spacing={3} w="full">
                         {editing ? (
@@ -150,7 +150,7 @@ const Task = ({
                     )}
                 </VStack>
 
-                {/* Actions */}
+                {}
                 <HStack spacing={{ base: 2, md: 3 }} flexWrap="wrap">
                     {editing ? (
                         <>

@@ -36,29 +36,24 @@ export default function GradientBackground() {
           color3="#212121"
           reflection={0.1}
 
-          // View (camera) props
           cAzimuthAngle={180}
           cPolarAngle={80}
           cDistance={2.8}
           cameraZoom={2.1}
 
-          // Effect props
           lightType="3d"
           brightness={1}
           envPreset="city"
           grain="on"
 
-          // Tool props
           toggleAxis={false}
           zoomOut={false}
           hoverState=""
 
-          // Optional - if using transition features
           enableTransition={false}
         />
       </ShaderGradientCanvas>
     </div>
   );
 }
-
 

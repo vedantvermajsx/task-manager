@@ -30,7 +30,6 @@ function App() {
 
       <Router>
         <ConditionalBackground />
-        <Toaster />
         <Routes>
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />

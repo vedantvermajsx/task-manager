@@ -46,7 +46,6 @@ export default function Login() {
             return;
         }
 
-
         setLoading(true);
 
         try {
@@ -92,7 +91,6 @@ export default function Login() {
                             T Dashboard
                         </Text>
                     </div>
-
 
                     <form onSubmit={handleSubmit} className="space-y-6 relative max-w-sm mx-auto">
                         <FormControl>

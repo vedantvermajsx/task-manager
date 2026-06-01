@@ -25,7 +25,7 @@ const userSchema=new mongoose.Schema({
             min:3,
             max:200
         },
-        default:"https://cdn-icons-png.flaticon.com/512/149/149071.png"
+        default:"https://res.cloudinary.com/druwykigf/image/upload/v1780329397/profile/pxwrgsoklqrc8s7cms3t.avif"
     },
     description:{
         type:String,

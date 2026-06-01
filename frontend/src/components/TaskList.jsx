@@ -13,7 +13,6 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
     const hasMoreRef = useRef(true);
     const scrollContainerRef = useRef(null);
 
-
     const fetchTasks = useCallback(async () => {
         if (loadingRef.current || !hasMoreRef.current) return;
 
@@ -31,7 +30,6 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                     setHasMore(false);
                 } else {
                     setTasks(prev => [...prev, ...newTasks]);
-                    // Add new tasks to allTasks if not already present
                     setAllTasks(prev => {
                         const existingIds = new Set(prev.map(t => t._id));
                         const tasksToAdd = newTasks.filter(t => !existingIds.has(t._id));
@@ -41,13 +39,12 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 }
             }
         } catch (err) {
-            MyToaster.error(err?.response?.data?.message || err.message || "Failed to fetch tasks", "error");
+            MyToaster.error(err?.response?.data?.message || err.message || "Failed to fetch tasks");
         } finally {
             loadingRef.current = false;
             setLoading(false);
         }
     }, [selectedDate, setTasks, setAllTasks]);
-
 
     useEffect(() => {
         TaskApi.resetPagination();
@@ -59,7 +56,6 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
 
     }, [selectedDate, fetchTasks]);
 
-    // Scroll listener on the container div instead of window
     useEffect(() => {
         const container = scrollContainerRef.current;
         if (!container) return;
@@ -85,7 +81,7 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 setTasksCount(prev => prev - 1);
             }
         } catch (error) {
-            MyToaster.error(error?.response?.data?.message || error.message || "Failed to delete task", "error");
+            MyToaster.error(error?.response?.data?.message || error.message || "Failed to delete task");
         }
     };
 
@@ -118,7 +114,7 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 );
             }
         } catch (error) {
-            MyToaster.error(error?.response?.data?.message || error.message || "Failed to update task", "error");
+            MyToaster.error(error?.response?.data?.message || error.message || "Failed to update task");
         }
     };
 
@@ -135,11 +131,10 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 );
             }
         } catch (error) {
-            MyToaster.error(error?.response?.data?.message || error.message || "Failed to update task", "error");
+            MyToaster.error(error?.response?.data?.message || error.message || "Failed to update task");
         }
     };
 
-    // Styles for the scrollable container
     const containerStyle = {
         maxHeight: SCROLLABLE_MAX_HEIGHT,
         overflowY: "auto",
@@ -147,7 +142,6 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
         position: "relative",
     };
 
-    // Custom scrollbar styles
     const scrollbarCSS = `
         .task-scroll-container::-webkit-scrollbar {
             width: 6px;
@@ -167,7 +161,7 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
 
     return (
         <div style={{ position: "relative" }}>
-            {/* Header */}
+            {}
             <div style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -196,10 +190,10 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 </span>
             </div>
 
-            {/* Inject scrollbar styles */}
+            {}
             <style>{scrollbarCSS}</style>
 
-            {/* Scrollable task container */}
+            {}
             <div
                 ref={scrollContainerRef}
                 className="task-scroll-container"

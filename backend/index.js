@@ -9,11 +9,18 @@ import authRouter from './routes/auth.routes.js'
 import taskRouter from './routes/task.routes.js'
 import userRouter from './routes/user.routes.js';
 import resetRouter from './routes/reset.routes.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 
 dotenv.config();
 
 const PORT=process.env.PORT || 4040;
+
 
 
 const app=express();
@@ -30,6 +37,8 @@ app.use(cookieParser());
 connectDB();
 app.use(Interceptor);
 
+app.use(express.static(path.join(__dirname,"frontend","dist")));
+
 
 
 app.use(express.json()); 
@@ -44,6 +53,16 @@ app.get("/health",(req,res)=>{
     res.status(200).json({success:true,message:"ok"});
 })
 
+
+
+const frontendPath = path.resolve(__dirname, '../frontend/dist');
+
+app.use(express.static(frontendPath));
+
+
+app.use((req,res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
 app.listen(PORT,()=>{
     console.log(`server is running on port ${PORT}`)

@@ -1,0 +1,22 @@
+{
+  "name": "deployement",
+  "version": "1.0.0",
+  "description": "helps to deploy the project",
+  "homepage": "https://github.com/vedantvermajsx/task-manager#readme",
+  "bugs": {
+    "url": "https://github.com/vedantvermajsx/task-manager/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vedantvermajsx/task-manager.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "npm i && cd frontend && npm i && npm run build",
+    "start": "cd backend && npm i && npm run start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

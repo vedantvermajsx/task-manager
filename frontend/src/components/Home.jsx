@@ -34,7 +34,6 @@ export default function Home() {
 
   const { user } = useContext(AuthContext);
 
-
   const [tasks, setTasks] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
   const [allTasksLoading, setAllTasksLoading] = useState(true);
@@ -50,7 +49,6 @@ export default function Home() {
   selected.setHours(0, 0, 0, 0);
   const isPastDate = selected < today;
 
-  // Fetch all tasks once for MonthStatus
   useEffect(() => {
     const fetchAll = async () => {
       try {
@@ -92,10 +90,10 @@ export default function Home() {
         setTaskTitle("");
         setTaskDescription("");
       } else {
-        MyToaster.error(response.message || "Failed to add task", "error");
+        MyToaster.error(response.message || "Failed to add task");
       }
     } catch (error) {
-      MyToaster.error(error?.response?.data?.message || error.message || "Failed to add task", "error");
+      MyToaster.error(error?.response?.data?.message || error.message || "Failed to add task");
     } finally {
       setAdding(false);
     }
@@ -104,7 +102,6 @@ export default function Home() {
   const name = user?.username || 'Guest';
   const avatar = user?.avatar || '';
 
-
   const logout = async () => {
     try {
       const response = await AuthApi.logout();
@@ -112,13 +109,13 @@ export default function Home() {
         window.location.href = "/";
       }
     } catch (error) {
-      MyToaster.error(error?.response?.data?.message || error.message || "Failed to logout", "error");
+      MyToaster.error(error?.response?.data?.message || error.message || "Failed to logout");
     }
   };
 
   return (
     <div className="min-h-screen text-white bg-[#050510] relative">
-      {/* Navbar */}
+      {}
       <Flex
         as="nav"
         align="center"
@@ -164,7 +161,6 @@ export default function Home() {
         </Stack>
       </Flex>
 
-
       <Container maxW={"7xl"} py={{ base: 6, md: 16 }} px={{ base: 4, md: 6 }}>
         <Flex
           gap={{ base: 6, md: 10 }}
@@ -172,11 +168,11 @@ export default function Home() {
           direction={{ base: "column-reverse", lg: "row" }}
         >
 
-          {/* LEFT SIDE */}
+          {}
           <Box flex="2" w={{ base: "100%", lg: "auto" }}>
             <VStack spacing={{ base: 6, md: 10 }} align="stretch">
 
-              {/* Header */}
+              {}
               <Box>
                 <Heading
                   size={{ base: "lg", md: "xl", lg: "2xl" }}
@@ -199,7 +195,7 @@ export default function Home() {
                 </Text>
               </Box>
 
-              {/* Add Task */}
+              {}
               <Box
                 bg="whiteAlpha.50"
                 p={{ base: 3, md: 4 }}
@@ -265,7 +261,7 @@ export default function Home() {
                 </form>
               </Box>
 
-              {/* TASKS */}
+              {}
               <TaskList
                 selectedDate={selectedDate}
                 setTasks={setTasks}
@@ -276,13 +272,13 @@ export default function Home() {
                 setAllTasks={setAllTasks}
               />
 
-              {/* MONTHLY SUMMARY CHART */}
+              {}
               <MonthStatus allTasks={allTasks} loading={allTasksLoading} />
 
             </VStack>
           </Box>
 
-          {/* RIGHT SIDE CALENDAR */}
+          {}
           <Box
             flex="1"
             w={{ base: "100%", lg: "auto" }}
@@ -318,7 +314,6 @@ export default function Home() {
 
         </Flex>
       </Container>
-
 
     </div>
   );

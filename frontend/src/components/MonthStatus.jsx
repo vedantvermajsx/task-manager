@@ -11,6 +11,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import TaskApi from "../api/TaskApi";
+import MyToaster from "./MyToaster";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -30,7 +31,7 @@ function MonthStatus({ allTasks, loading: externalLoading, isStatic = false }) {
             setInternalTasks(response.ResponseTasks || []);
           }
         } catch (err) {
-          MyToaster.error(err?.response?.data?.message || err.message || "Failed to fetch tasks", "error");
+          MyToaster.error(err?.response?.data?.message || err.message || "Failed to fetch tasks");
         } finally {
           setInternalLoading(false);
         }
