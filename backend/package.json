@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Task Manager Backend - RESTful API for task management by vedantvermajsx",
   "license": "ISC",
-  "author": "vedantvermajsx",
+  "author": "vedantvermajsx yashyadav",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -11,21 +11,24 @@
     "dev": "nodemon index.js",
     "start": "node index.js"
   },
-  "keywords": ["task-manager", "todo", "productivity", "api", "vedantvermajsx"],
+  "keywords": [
+    "task-manager",
+    "todo",
+    "productivity",
+    "api",
+    "vedantvermajsx"
+  ],
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@emailjs/nodejs": "^5.0.2",
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.2.1",
     "cookie-parser": "1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
-    "emailjs-com": "^3.2.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^9.6.2",
     "multer": "^2.0.2",
-    "swagger-jsdoc": "^6.3.0",
-    "swagger-ui-express": "^5.0.1"
+    "express-rate-limit": "8.5.2"
   }
 }

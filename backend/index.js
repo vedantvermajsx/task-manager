@@ -11,6 +11,7 @@ import userRouter from './routes/user.routes.js';
 import resetRouter from './routes/reset.routes.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import rateLimit from 'express-rate-limit';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,11 +34,19 @@ app.use(cors({
 }));
 
 app.use(cookieParser());
+app.use(rateLimit(
+    {
+        windowMs: 1000 * 60,
+        max: 30,
+    }
+));
+
 
 connectDB();
 app.use(Interceptor);
 
 app.use(express.static(path.join(__dirname,"frontend","dist")));
+
 
 
 
