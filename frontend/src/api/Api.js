@@ -1,7 +1,7 @@
 import axios from "axios";
 class Api {
     constructor() {
-        this.baseUrl = import.meta.env.VITE_SERVER_API;
+        this.baseUrl = "https://taskly-task-manager-442q.onrender.com";
         this.axios = axios.create({
             baseURL: this.baseUrl,
             headers: {
