@@ -15,8 +15,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "install:all": "npm i && cd frontend && npm i && npm run build",
-    "start": "cd backend && npm i && npm run start",
+    "install:frontend": "npm i && cd frontend && npm i && npm run build",
+    "install:backend": "cd backend && npm i",
+    "start": "cd backend && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
