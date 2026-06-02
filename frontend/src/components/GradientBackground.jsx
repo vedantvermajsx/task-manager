@@ -1,5 +1,6 @@
 import { ShaderGradientCanvas, ShaderGradient } from '@shadergradient/react';
 import { isDesktop } from 'react-device-detect';
+import { Box } from '@chakra-ui/react';
 
 export default function GradientBackground({ showGradient }) {
   if (isDesktop && showGradient) {
@@ -58,9 +59,23 @@ export default function GradientBackground({ showGradient }) {
     )
   } else {
     return (
-      <div className="fixed inset-0 -z-10 bg-[#212121]">
-        <img src="https://res.cloudinary.com/druwykigf/image/upload/v1780377969/profile/b4tpxrncpdd0m3xoh3am.avif" alt="" />
-      </div>
+
+      <Box
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        backgroundImage={'https://res.cloudinary.com/druwykigf/image/upload/v1780377969/profile/b4tpxrncpdd0m3xoh3am.avif'}
+
+        backgroundSize="cover"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        filter="blur(5px) brightness(0.3)"
+        boxShadow="0 0 30px rgba(0,0,0,0.35)"
+        zIndex={-1}
+
+      />
     )
   }
 }
