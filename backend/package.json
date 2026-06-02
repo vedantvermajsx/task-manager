@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Task Manager Backend - RESTful API for task management by vedantvermajsx",
   "license": "ISC",
-  "author": "vedantvermajsx yashyadav",
+  "author": "vedantvermajsx, yashyadav",
   "type": "module",
   "main": "index.js",
   "scripts": {

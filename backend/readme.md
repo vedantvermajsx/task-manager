@@ -1,36 +1,41 @@
 # Task Manager - Backend API
 
-
-This is the backend API for Task Manager, a robust task management application built by **vedantvermajsx**  in collaboration with **yash yadav**. The API provides secure user authentication and comprehensive CRUD operations for tasks.
+This is the backend API for Task Manager, a robust task management application built by vedantvermajsx in collaboration with yashyadav. The API provides secure user authentication and comprehensive CRUD operations for tasks.
 
 ## Tech Stack
 
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white)
-![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white)
-![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)
-![JWT](https://img.shields.io/badge/JSON%20Web%20Tokens-000000?style=flat&logo=jsonwebtokens&logoColor=white)
-![Bcrypt](https://img.shields.io/badge/Bcrypt-47A248?style=flat&logo=lock&logoColor=white)
-![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=flat&logo=cloudinary&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![JWT](https://img.shields.io/badge/JSON%20Web%20Tokens-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
+![Bcrypt](https://img.shields.io/badge/Bcrypt-339933?style=for-the-badge)
+![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)
 
-- Server: Node.js with Express framework
-- Database: MongoDB using Mongoose ORM
-- Authentication: JSON Web Token (JWT) and Bcrypt for password hashing
-- Rate Limiting: express-rate-limit (30 requests per minute per IP)
-- File Upload: Multer (memory storage) + Cloudinary (cloud storage)
-- Email Service: EmailJS (@emailjs/nodejs)
-- Other Dependencies: dotenv, cookie-parser, cors, nodemon (development)
+- Node.js - Runtime
+- Express - Web framework
+- MongoDB (via Mongoose) - Database & ORM
+- JSON Web Token (JWT) - Authentication
+- Bcrypt - Password hashing
+- CORS - Cross-origin resource sharing
+- Cookie Parser - Cookie handling
+- Dotenv - Environment variables
+- Multer - File upload handling
+- Cloudinary - Cloud storage for files/avatars
+- EmailJS (@emailjs/nodejs) - Email sending (OTP, password reset)
+- Express Rate Limit - Rate limiting (30 requests per minute per IP)
+- Nodemon - Dev server reload
 
 ## API Endpoints
 
 ### Authentication
 - POST `/auth/register`: Register a new user. Requires username, email, and password.
 - POST `/auth/login`: Authenticate a user and receive a JWT cookie. Requires email and password.
-- POST `/auth/logout`: Logout user and clear JWT cookie.
+- GET `/auth/logout`: Logout user and clear JWT cookie.
+- GET `/auth/me`: Get authenticated user's details.
 
 ### Password Reset
-- POST `/reset/sendOtp`: Send OTP to email for password reset.
-- POST `/reset/verifyOtp`: Verify OTP and get reset token.
-- POST `/reset/updatePassword`: Update password using reset token.
+- POST `/reset/send-reset-email`: Send OTP to email for password reset.
+- POST `/reset/reset-password/:token`: Verify OTP and update password using reset token.
 
 ### User (Protected Routes)
 - GET `/user/authenticate`: Get authenticated user's details.
@@ -38,26 +43,45 @@ This is the backend API for Task Manager, a robust task management application b
 - PUT `/user/updateProfilePic`: Upload and update user's profile picture (uses Multer + Cloudinary).
 
 ### Tasks (Protected Routes)
-- GET `/task/getTasks`: Fetch all tasks created by the authenticated user.
-- POST `/task/addTask`: Create a new task. Requires title and description.
-- PUT `/task/updateTask/:id`: Update an existing task's title, description, or completed status.
-- DELETE `/task/deleteTask/:id`: Permanently remove a task by its ID.
+- GET `/task/getAll`: Fetch all tasks created by the authenticated user.
+- GET `/task/get/:id`: Get a single task by ID.
+- POST `/task/add`: Create a new task. Requires title and description.
+- PUT `/task/update/:id`: Update an existing task's title, description, or completed status.
+- PUT `/task/update-task/:id`: Update an existing task.
+- DELETE `/task/delete/:id`: Permanently remove a task by its ID.
 
 ### Health Check
 - GET `/health`: Health check endpoint (returns 200 OK).
 
 ## Setup and Installation
 
-1. Clone the repository and navigate to the backend directory.
+### Prerequisites
+- Node.js (v18 or higher recommended)
+- MongoDB instance (local or Atlas)
+- Cloudinary account (for file uploads)
+- EmailJS account (for sending OTP emails)
+
+1. Navigate to the backend directory.
 2. Install dependencies:
    ```bash
    npm install
    ```
 3. Environment Configuration:
    Create a .env file in the backend directory with the following variables:
-   - PORT (default: 8080)
-   - JWT_SECRET (optional, default provided)
-   - Note: The database connection string is currently managed in db.js.
+   ```
+   PORT=4040
+   MONGO_URI=mongodb://localhost:27017/task-manager
+   JWT_SECRET=your_jwt_secret_key_here
+   JWT_EXPIRE=7d
+   NODE_ENV=development
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   EMAILJS_SERVICE_ID=your_emailjs_service_id
+   EMAILJS_TEMPLATE_ID=your_emailjs_template_id
+   EMAILJS_PUBLIC_KEY=your_emailjs_public_key
+   EMAILJS_PRIVATE_KEY=your_emailjs_private_key
+   ```
 
 4. Run the application:
    - Development mode:
@@ -110,6 +134,8 @@ This is the backend API for Task Manager, a robust task management application b
   - `MaskEmail.js`: Email masking utility
 - **index.js**: Application entry point
 
-## Developer
+## Authors
 
-This project is developed and maintained by **vedantvermajsx**.
+- vedantvermajsx
+- yashyadav (Collaboration)
+
