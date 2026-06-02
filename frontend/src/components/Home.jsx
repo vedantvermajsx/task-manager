@@ -55,7 +55,7 @@ export default function Home() {
         const response = await TaskApi.getAllTasks();
         if (response.success) {
           setAllTasks(response.ResponseTasks || []);
-        }else{
+        } else {
           MyToaster.warning(response.message || "Failed to fetch tasks");
         }
       } catch (err) {
@@ -115,7 +115,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen text-white bg-[#050510] relative">
-      {}
+      { }
       <Flex
         as="nav"
         align="center"
@@ -168,11 +168,11 @@ export default function Home() {
           direction={{ base: "column-reverse", lg: "row" }}
         >
 
-          {}
+          { }
           <Box flex="2" w={{ base: "100%", lg: "auto" }}>
             <VStack spacing={{ base: 6, md: 10 }} align="stretch">
 
-              {}
+              { }
               <Box>
                 <Heading
                   size={{ base: "lg", md: "xl", lg: "2xl" }}
@@ -195,7 +195,7 @@ export default function Home() {
                 </Text>
               </Box>
 
-              {}
+              { }
               <Box
                 bg="whiteAlpha.50"
                 p={{ base: 3, md: 4 }}
@@ -261,7 +261,7 @@ export default function Home() {
                 </form>
               </Box>
 
-              {}
+              { }
               <TaskList
                 selectedDate={selectedDate}
                 setTasks={setTasks}
@@ -272,13 +272,13 @@ export default function Home() {
                 setAllTasks={setAllTasks}
               />
 
-              {}
+              { }
               <MonthStatus allTasks={allTasks} loading={allTasksLoading} />
 
             </VStack>
           </Box>
 
-          {}
+          { }
           <Box
             flex="1"
             w={{ base: "100%", lg: "auto" }}

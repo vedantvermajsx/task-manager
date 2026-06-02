@@ -8,14 +8,12 @@ import NotFound from "./components/NotFound";
 import GradientBackground from "./components/GradientBackground";
 import "./App.css";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import { Toaster } from "react-hot-toast";
 
 function ConditionalBackground() {
   const location = useLocation();
-  const showGradient = ["/login", "/register", "/forgot-password", "*"].includes(location.pathname);
+  const showGradient = ["/login", "/register", "/forgot-password"].includes(location.pathname);
 
-  if (!showGradient) return null;
-  return <GradientBackground />;
+  return <GradientBackground showGradient={showGradient} />;
 }
 
 function App() {
