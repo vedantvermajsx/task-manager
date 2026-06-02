@@ -2,7 +2,7 @@ import axios from "axios";
 import MyToaster from "../components/MyToaster";
 class Api {
     constructor() {
-        this.baseUrl = "https://taskly-task-manager-442q.onrender.com";
+        this.baseUrl = import.meta.env.VITE_SERVER_API;
         this.axios = axios.create({
             baseURL: this.baseUrl,
             headers: {
