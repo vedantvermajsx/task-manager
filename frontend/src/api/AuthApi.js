@@ -14,6 +14,9 @@ class AuthApi extends Api {
             return response.data;
         }
         catch(err){
+              if(!err.status){
+                return this.defaultError;
+            }
             return err.response.data;
         }
     }
@@ -28,6 +31,9 @@ class AuthApi extends Api {
             return response.data;
         }
         catch(err){
+              if(!err.status){
+                return this.defaultError;
+            }
             return err.response.data;
         }
     }
@@ -35,12 +41,18 @@ class AuthApi extends Api {
     async login(loginRequest) {
         try{
             const response = await this.axios.post("/auth/login", loginRequest);
+            
             if(!response){
                 return this.defaultError;
             }
             return response.data;
         }
         catch(err){
+            
+            if(!err.status){
+                return this.defaultError;
+            }
+
             return err.response.data;
         }    
     }
@@ -54,6 +66,9 @@ class AuthApi extends Api {
             return response.data;
         }
         catch(err){
+              if(!err.status){
+                return this.defaultError;
+            }
             return err.response.data;
         }
     }
@@ -68,6 +83,9 @@ class AuthApi extends Api {
             return response.data;
         }
         catch(err){
+              if(!err.status){
+                return this.defaultError;
+            }
             return err.response.data;
         }
     }
@@ -89,6 +107,9 @@ class AuthApi extends Api {
             return response.data;
         }
         catch(err){
+              if(!err.status){
+                return this.defaultError;
+            }
             return err.response.data;
         }
     }
@@ -102,6 +123,9 @@ class AuthApi extends Api {
             return response.data;
         }
         catch(err){
+              if(!err.status){
+                return this.defaultError;
+            }
             return err.response.data;
         }
     }
@@ -116,6 +140,9 @@ class AuthApi extends Api {
             return response.data;
         }
         catch(err){
+              if(!err.status){
+                return this.defaultError;
+            }
             return err.response.data;
         }
     }
@@ -126,9 +153,12 @@ class AuthApi extends Api {
             if(!response){
                 return this.defaultError;
             }
-            return response.data;
+            return err.response.data;
         }
         catch(err){
+              if(!err.status){
+                return this.defaultError;
+            }
             return err.response.data;
         }   
     }

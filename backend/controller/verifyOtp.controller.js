@@ -9,19 +9,19 @@ async function verifyOtp(req,res){
     
     const user=await User.findOne({email});
     if(!user){
-        return res.status(404).json({message:"User not found"});
+        return res.status(404).json({success:false,message:"User not found"});
     }
     
 
     if(!otpData){
-        return res.status(404).json({message:"Otp expired"});
+        return res.status(404).json({success:false,message:"Otp expired"});
     }
 
     if(otpData.otp!==otp){
-        return res.status(400).json({message:"Invalid Otp"});
+        return res.status(400).json({success:false,message:"Invalid Otp"});
     }
     if(otpData.expiresAt<Date.now()){
-        return res.status(400).json({message:"Otp expired"});
+        return res.status(400).json({success:false,message:"Otp expired"});
     }
 
 

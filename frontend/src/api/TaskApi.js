@@ -12,12 +12,16 @@ class TaskApi extends Api {
                 params: { page, size,date }
             });
             if(!response){
+                
                 return this.defaultError;
             }
 
             this.page++;
             return response.data;
         } catch (error) {
+              if(!error.status){
+                return this.defaultError;
+            }
             return error.response.data;
         }
     }
@@ -33,6 +37,9 @@ class TaskApi extends Api {
             return response.data;
 
         } catch (error) {
+              if(!error.status){
+                return this.defaultError;
+            }
             return error.response.data;
         }
     }
@@ -45,6 +52,9 @@ class TaskApi extends Api {
             }
             return response.data;
         } catch (error) {
+              if(!error.status){
+                return this.defaultError;
+            }
            return error.response.data;
         }
     }
@@ -57,6 +67,9 @@ class TaskApi extends Api {
             }
             return response.data;
         } catch (error) {
+              if(!error.status){
+                return this.defaultError;
+            }
            return error.response.data;
         }
     }
@@ -69,6 +82,9 @@ class TaskApi extends Api {
             }
             return response.data;
         } catch (error) {
+              if(!error.status){
+                return this.defaultError;
+            }
            return error.response.data;
         }
     }

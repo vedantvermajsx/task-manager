@@ -79,6 +79,9 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 setTasks((prev) => prev.filter((t) => t._id !== id));
                 setAllTasks((prev) => prev.filter((t) => t._id !== id));
                 setTasksCount(prev => prev - 1);
+                MyToaster.success("Task deleted successfully");
+            } else {
+                MyToaster.error(response.message || "Failed to delete task");
             }
         } catch (error) {
             MyToaster.error(error?.response?.data?.message || error.message || "Failed to delete task");
@@ -112,6 +115,9 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                             : t
                     )
                 );
+                MyToaster.success("Task updated successfully");
+            } else {
+                MyToaster.error(response.message || "Failed to update task");
             }
         } catch (error) {
             MyToaster.error(error?.response?.data?.message || error.message || "Failed to update task");
@@ -129,6 +135,9 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 setAllTasks((prev) =>
                     prev.map((t) => (t._id === id ? newTaskData : t))
                 );
+                MyToaster.success("Task updated successfully");
+            } else {
+                MyToaster.error(response.message || "Failed to update task");
             }
         } catch (error) {
             MyToaster.error(error?.response?.data?.message || error.message || "Failed to update task");
@@ -161,7 +170,7 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
 
     return (
         <div style={{ position: "relative" }}>
-            {}
+            { }
             <div style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -190,10 +199,10 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 </span>
             </div>
 
-            {}
+            { }
             <style>{scrollbarCSS}</style>
 
-            {}
+            { }
             <div
                 ref={scrollContainerRef}
                 className="task-scroll-container"

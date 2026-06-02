@@ -89,6 +89,7 @@ export default function Home() {
         setTasksCount((prev) => prev + 1);
         setTaskTitle("");
         setTaskDescription("");
+        MyToaster.success("Task added successfully");
       } else {
         MyToaster.error(response.message || "Failed to add task");
       }
@@ -106,6 +107,8 @@ export default function Home() {
     try {
       const response = await AuthApi.logout();
       if (response.success) {
+        MyToaster.success("Logout successful");
+
         window.location.href = "/";
       }
     } catch (error) {

@@ -30,6 +30,7 @@ export default function Profile() {
     try {
       const response = await AuthApi.logout();
       if (response.success) {
+        MyToaster.success("Logout successful");
         window.location.href = "/";
       }
     } catch (error) {
@@ -62,6 +63,8 @@ export default function Profile() {
         setEditUsername(user.username || "");
         setEditDescription(user.description || "");
         setEditAvatarUrl(user.avatar || "");
+
+        MyToaster.info("Profile loaded successfully");
       }
     };
 
@@ -79,9 +82,18 @@ export default function Profile() {
 
       if (data.success) {
         setEditAvatarUrl(data.url);
+
+        setUser(prev => ({
+          ...prev,
+          avatar: data.url
+        }));
+
+        MyToaster.info("Profile picture updated successfully");
+      } else {
+        MyToaster.warning(data.message || "Failed to update profile picture");
       }
     } catch (err) {
-      alert(err.response.data.message);
+      MyToaster.error(err?.response?.data?.message || err.message || "Failed to update profile picture");
     } finally {
       setIsUploading(false);
     }
@@ -108,6 +120,7 @@ export default function Profile() {
 
         setUser(updated);
         setIsEditing(false);
+        MyToaster.info("Profile updated successfully");
       } else {
         MyToaster.warning(response.message || "Failed to update profile");
       }

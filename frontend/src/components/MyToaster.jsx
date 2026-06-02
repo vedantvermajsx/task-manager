@@ -1,74 +1,76 @@
-import toast from "react-hot-toast";
-import {
-    CheckCircle,
-    XCircle,
-    AlertTriangle,
-    Info,
-} from "lucide-react";
-
+import { toast } from "sonner";
+import { CheckCircle, XCircle, Info, AlertTriangle } from "lucide-react";
 class MyToaster {
     defaultOptions = {
         position: "top-right",
-        duration: 2000,
-        style: {
-            borderRadius: "12px",
-            padding: "14px 16px",
-            color: "#fff",
-            fontWeight: "500",
-            boxShadow:
-                "0 10px 25px rgba(0,0,0,0.15)",
-            backdropFilter: "blur(8px)",
-        },
+        duration: 1000,
     };
 
-    success(message, duration = 2000) {
+    success(message, duration = 1000) {
         toast.success(message, {
             ...this.defaultOptions,
             duration,
             icon: <CheckCircle size={20} />,
             style: {
-                ...this.defaultOptions.style,
-                background:
-                    "linear-gradient(135deg, #10B981, #059669)",
+                borderRadius: "12px",
+                padding: "14px 16px",
+                color: "#fff",
+                fontWeight: "500",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+                backdropFilter: "blur(8px)",
+                background: "linear-gradient(135deg, #10B981, #059669)",
             },
         });
     }
 
-    error(message, duration = 2000) {
+    error(message, duration = 1000) {
         toast.error(message, {
             ...this.defaultOptions,
             duration,
             icon: <XCircle size={20} />,
             style: {
-                ...this.defaultOptions.style,
-                background:
-                    "linear-gradient(135deg, #EF4444, #DC2626)",
+                borderRadius: "12px",
+                padding: "14px 16px",
+                color: "#fff",
+                fontWeight: "500",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+                backdropFilter: "blur(8px)",
+                background: "linear-gradient(135deg, #EF4444, #DC2626)",
             },
         });
     }
 
-    warning(message, duration = 2000) {
-        toast(message, {
+    warning(message, duration = 1000) {
+        toast.warning(message, {
             ...this.defaultOptions,
             duration,
-            icon: <AlertTriangle size={20} color="#FBBF24" />,
+            icon: <AlertTriangle size={20} color="#F59E0B" />,
             style: {
-                ...this.defaultOptions.style,
-                background:
-                    "linear-gradient(135deg, #F59E0B, #D97706)",
+                borderRadius: "12px",
+                padding: "14px 16px",
+                color: "#fff",
+                fontWeight: "500",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+                backdropFilter: "blur(8px)",
+                background: "linear-gradient(135deg, #F59E0B, #D97706)",
             },
+
         });
     }
 
-    info(message, duration = 2000) {
-        toast(message, {
+    info(message, duration = 1000) {
+        toast.info(message, {
             ...this.defaultOptions,
             duration,
             icon: <Info size={20} color="#60A5FA" />,
             style: {
-                ...this.defaultOptions.style,
-                background:
-                    "linear-gradient(135deg, #3B82F6, #2563EB)",
+                borderRadius: "12px",
+                padding: "14px 16px",
+                color: "#fff",
+                fontWeight: "500",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+                backdropFilter: "blur(8px)",
+                background: "linear-gradient(135deg, #3B82F6, #2563EB)",
             },
         });
     }
