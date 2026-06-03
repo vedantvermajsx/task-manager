@@ -59,13 +59,13 @@ export default function ForgotPassword() {
 
       const response = await AuthApi.sendOtp(new PasswordRequest(email));
       if (response.success) {
-        setStep(2);
         MyToaster.success("OTP sent successfully", "success");
+        setStep(2);
       } else {
-        MyToaster.warn(response.message || "Failed to send OTP", "error");
+        MyToaster.warning(response.message || "Failed to send OTP", "error");
       }
     } catch (err) {
-      MyToaster.error(err?.response?.data?.message || "Failed to send OTP", "error");
+      MyToaster.error(err?.message || "Failed to send OTP", "error");
     }
 
     setLoading(false);
@@ -89,10 +89,10 @@ export default function ForgotPassword() {
         setStep(3);
         MyToaster.success("OTP verified successfully", "success");
       } else {
-        MyToaster.warn(data.message || "Failed to verify OTP", "error");
+        MyToaster.warning(data.message || "Failed to verify OTP", "error");
       }
     } catch (err) {
-      MyToaster.error(err?.response?.data?.message || "Invalid OTP", "error");
+      MyToaster.error(err?.message || "Invalid OTP", "error");
     }
 
     setLoading(false);
@@ -111,14 +111,15 @@ export default function ForgotPassword() {
 
     try {
       const response = await AuthApi.updatePassword(new PasswordRequest(email, null, password, token));
+
       if (response.success) {
         setStep(4);
         MyToaster.success("Password updated successfully", "success");
       } else {
-        MyToaster.warn(response.message || "Failed to update password", "error");
+        MyToaster.warning(response.message || "Failed to update password", "error");
       }
     } catch (err) {
-      MyToaster.error(err?.response?.data?.message || "Password update failed", "error");
+      MyToaster.error(err?.message || "Password update failed", "error");
     }
 
     setLoading(false);

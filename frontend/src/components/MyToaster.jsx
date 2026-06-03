@@ -4,6 +4,7 @@ class MyToaster {
     defaultOptions = {
         position: "top-right",
         duration: 1000,
+        zIndex: 10000,
     };
 
     success(message, duration = 1000) {
@@ -44,11 +45,11 @@ class MyToaster {
         toast.warning(message, {
             ...this.defaultOptions,
             duration,
-            icon: <AlertTriangle size={20} color="#F59E0B" />,
+            icon: <AlertTriangle size={20} color="#000000ff" />,
             style: {
                 borderRadius: "12px",
                 padding: "14px 16px",
-                color: "#fff",
+                color: "#000000ff",
                 fontWeight: "500",
                 boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
                 backdropFilter: "blur(8px)",

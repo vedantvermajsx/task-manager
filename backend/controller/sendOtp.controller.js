@@ -11,7 +11,7 @@ async function sendOtp(req,res){
         return res.status(404).json({success:false, message:"User not found"});
     }
 
-
+    
     const otpData=await Otp.findOne({email});
     if(otpData){
         await emailJs.sendOtp(email,otpData.otp);

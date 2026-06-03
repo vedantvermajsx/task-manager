@@ -32,7 +32,7 @@ function ProtectedRoute({ children }) {
         checkAuth();
     }, [setUser]);
 
-    if (loading) return <Spinner size="md" color="white" />;
+    if (loading) return <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}><Spinner size="xl" color="white" /></div>;
 
     if (!isAuth) return <Navigate to="/login" replace />;
 

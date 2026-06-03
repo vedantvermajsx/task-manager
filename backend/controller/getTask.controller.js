@@ -27,10 +27,11 @@ async function getTasks(req,res){
             const skip = page * limit;
             query = query.skip(skip).limit(limit);
         }
-        const taskCount = await Task.countDocuments({createdBy:userId});
+        const taskCount = await Task.countDocuments({createdBy:userId,createdAt:filter.createdAt});
         
         const Tasks = await query;
         const ResponseTasks = Tasks.map((task) => new TaskResponse(task));
+        
         return res.status(200).json({success:true,ResponseTasks,totalTasks:taskCount});
     } catch (error) {
         res.status(500).json({success:false,message:error.message});

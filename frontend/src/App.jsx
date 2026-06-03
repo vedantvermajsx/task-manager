@@ -9,12 +9,6 @@ import GradientBackground from "./components/GradientBackground";
 import "./App.css";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
-function ConditionalBackground() {
-  const location = useLocation();
-  const showGradient = ["/login", "/register", "/forgot-password"].includes(location.pathname);
-
-  return <GradientBackground showGradient={showGradient} />;
-}
 
 function App() {
   return (
@@ -28,7 +22,7 @@ function App() {
       </svg>
 
       <Router>
-        <ConditionalBackground />
+        <GradientBackground />
         <Routes>
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />

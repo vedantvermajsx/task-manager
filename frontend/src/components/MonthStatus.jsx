@@ -19,7 +19,6 @@ function MonthStatus({ allTasks, loading: externalLoading, isStatic = false }) {
   const [data, setData] = useState([]);
   const [internalTasks, setInternalTasks] = useState([]);
   const [internalLoading, setInternalLoading] = useState(false);
-  const [now, setNow] = useState(Date.now());
 
   useEffect(() => {
     if (isStatic) {
@@ -41,15 +40,6 @@ function MonthStatus({ allTasks, loading: externalLoading, isStatic = false }) {
     }
   }, [isStatic]);
 
-  useEffect(() => {
-    if (isStatic) return;
-
-    const intervalId = setInterval(() => {
-      setNow(Date.now());
-    }, 60000); 
-
-    return () => clearInterval(intervalId);
-  }, [isStatic]);
 
   const tasksToUse = isStatic ? internalTasks : allTasks;
   const loading = isStatic ? internalLoading : externalLoading;
@@ -60,18 +50,16 @@ function MonthStatus({ allTasks, loading: externalLoading, isStatic = false }) {
       return acc;
     }, {});
 
-    const currentNow = Date.now();
-
     tasksToUse.forEach(task => {
       if (task.createdAt) {
         const date = new Date(task.createdAt);
         const month = MONTHS[date.getMonth()];
-        const hoursElapsed = (currentNow - date.getTime()) / (1000 * 60 * 60);
         if (monthDataMap[month]) {
           monthDataMap[month].Total += 1;
+          console.log(task.completed);
           if (task.completed) {
             monthDataMap[month].Completed += 1;
-          } else if (hoursElapsed >= 24) {
+          } else {
             monthDataMap[month].Failed += 1;
           }
         }
@@ -79,10 +67,13 @@ function MonthStatus({ allTasks, loading: externalLoading, isStatic = false }) {
     });
 
     return Object.values(monthDataMap);
-  }, [tasksToUse, isStatic]);
+  }, [tasksToUse]);
 
   useEffect(() => {
-    setData(calculatedData);
+    async function updateData() {
+      setData(calculatedData);
+    }
+    updateData();
   }, [calculatedData]);
 
   return (

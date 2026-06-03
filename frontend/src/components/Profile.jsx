@@ -64,6 +64,8 @@ export default function Profile() {
         setEditDescription(user.description || "");
         setEditAvatarUrl(user.avatar || "");
 
+        console.log(user);
+
         MyToaster.info("Profile loaded successfully");
       }
     };

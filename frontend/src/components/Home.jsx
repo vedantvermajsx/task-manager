@@ -32,7 +32,7 @@ import MyToaster from "./MyToaster";
 export default function Home() {
   const navigate = useNavigate();
 
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const [tasks, setTasks] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
@@ -90,6 +90,8 @@ export default function Home() {
         setTaskTitle("");
         setTaskDescription("");
         MyToaster.success("Task added successfully");
+
+        setUser(prev => ({ ...prev, tasksCount: prev.tasksCount + 1 }));
       } else {
         MyToaster.error(response.message || "Failed to add task");
       }
@@ -194,7 +196,7 @@ export default function Home() {
                   textTransform="uppercase"
                   letterSpacing="0.2em"
                 >
-                  Directive Monitoring Interface
+                  What's on your mind?
                 </Text>
               </Box>
 

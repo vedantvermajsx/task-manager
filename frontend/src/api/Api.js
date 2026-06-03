@@ -1,5 +1,4 @@
 import axios from "axios";
-import MyToaster from "../components/MyToaster";
 class Api {
     constructor() {
         this.baseUrl = import.meta.env.VITE_SERVER_API;
@@ -11,17 +10,7 @@ class Api {
             },
             withCredentials:true,
         });
-
         
-        this.axios.interceptors.response.use(
-            (response) => response,
-            (error) => {
-                if(error.response.status === 401){    
-                    MyToaster.error("Session expired. Please login again.");
-                }
-                return Promise.reject(error);
-            }
-        )
          this.defaultError={
             status:500,
             success:false,

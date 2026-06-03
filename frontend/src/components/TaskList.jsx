@@ -1,13 +1,17 @@
 import Task from "./Task";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useContext } from "react";
 import TaskApi from "../api/TaskApi";
 
 const SCROLLABLE_MAX_HEIGHT = "700px";
 import MyToaster from "./MyToaster";
+import { AuthContext } from "../contexts/AuthContext";
 
 const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, allTasks, setAllTasks }) => {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+
+
+    const { user, setUser } = useContext(AuthContext);
 
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
@@ -35,8 +39,8 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                         const tasksToAdd = newTasks.filter(t => !existingIds.has(t._id));
                         return [...prev, ...tasksToAdd];
                     });
-                    setTasksCount(fetchedTasks.totalTasks);
                 }
+                setTasksCount(fetchedTasks.totalTasks);
             }
         } catch (err) {
             MyToaster.error(err?.response?.data?.message || err.message || "Failed to fetch tasks");
@@ -47,12 +51,15 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
     }, [selectedDate, setTasks, setAllTasks]);
 
     useEffect(() => {
-        TaskApi.resetPagination();
-        setTasks([]);
-        setHasMore(true);
-        hasMoreRef.current = true;
-        loadingRef.current = false;
-        fetchTasks();
+        async function updateTasks() {
+            TaskApi.resetPagination();
+            setTasks([]);
+            setHasMore(true);
+            hasMoreRef.current = true;
+            loadingRef.current = false;
+            fetchTasks();
+        }
+        updateTasks();
 
     }, [selectedDate, fetchTasks]);
 
@@ -79,7 +86,9 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 setTasks((prev) => prev.filter((t) => t._id !== id));
                 setAllTasks((prev) => prev.filter((t) => t._id !== id));
                 setTasksCount(prev => prev - 1);
+                setUser(prev => ({ ...prev, tasksCount: prev.tasksCount - 1 }));
                 MyToaster.success("Task deleted successfully");
+                console.log(user);
             } else {
                 MyToaster.error(response.message || "Failed to delete task");
             }
@@ -108,6 +117,11 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                             : t
                     )
                 );
+
+                const change = newTaskData.completed ? 1 : -1;
+                setUser(prev => ({ ...prev, completedTasks: prev.completedTasks + change }));
+                setUser(prev => ({ ...prev, failedTasks: prev.failedTasks - change }));
+
                 setAllTasks((prev) =>
                     prev.map((t) =>
                         t._id === id
@@ -115,6 +129,7 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                             : t
                     )
                 );
+                console.log(user);
                 MyToaster.success("Task updated successfully");
             } else {
                 MyToaster.error(response.message || "Failed to update task");

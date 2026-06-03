@@ -7,11 +7,11 @@ async function updatePassword(req,res){
 
     const otpData=await Otp.findOne({email,token});
     if(!otpData){
-        return res.status(404).json({message:"Otp expired"});
+        return res.status(404).json({success:false,message:"Otp expired"});
     }
     
     if(otpData.expiresAt<Date.now()){
-        return res.status(400).json({message:"Otp expired"});
+        return res.status(400).json({success:false,message:"Otp expired"});
     }
 
     const hashedPassword=await hashPassword(password);
@@ -19,10 +19,10 @@ async function updatePassword(req,res){
     const user =await User.findOneAndUpdate({email},{$set:{password:hashedPassword}},{'returnDocument':'after'});
 
 
-    if(!user) return res.status(404).json({message:"User not found"});
+    if(!user) return res.status(404).json({success:false,message:"User not found"});
 
     await Otp.deleteOne({email});
-    return res.status(200).json({message:"password changed sucessfully"});
+    return res.status(200).json({success:true,message:"password changed sucessfully"});
 }
 
 export default updatePassword;

@@ -6,7 +6,6 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import GradientBackground from "./GradientBackground";
 
 const MotionBox = motion(Box);
 
@@ -15,8 +14,6 @@ export default function NotFound() {
 
     return (
         <>
-            <GradientBackground showGradient={true} />
-
             <div className="min-h-screen flex items-center justify-center px-4 overflow-hidden relative bg-transparent">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-500/5 blur-[100px] clip-abstract" />
                 <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-500/5 blur-[100px] clip-shape" />
