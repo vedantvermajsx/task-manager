@@ -16,7 +16,7 @@ import {
   PinInput,
   PinInputField,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiArrowLeft, FiCheckCircle } from "react-icons/fi";
 import AuthApi from "../api/AuthApi";
@@ -30,6 +30,7 @@ const totalSteps = 3;
 const OTP_LENGTH = 8;
 
 export default function ForgotPassword() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
 
   const [loading, setLoading] = useState(false);
@@ -49,53 +50,52 @@ export default function ForgotPassword() {
   const handleSendOtp = async (e) => {
     e.preventDefault();
     if (!isEmailFormValid) {
-      MyToaster.warning("Please enter a valid email", "error");
+      MyToaster.warning("Please enter a valid email");
       return;
     }
 
     setLoading(true);
 
-    try {
 
+    try {
       const response = await AuthApi.sendOtp(new PasswordRequest(email));
       if (response.success) {
-        MyToaster.success("OTP sent successfully", "success");
+        MyToaster.success(response?.message);
         setStep(2);
       } else {
-        MyToaster.warning(response.message || "Failed to send OTP", "error");
+        MyToaster.warning(response?.message);
       }
     } catch (err) {
-      MyToaster.error(err?.message || "Failed to send OTP", "error");
+      MyToaster.error(err?.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
-  // STEP 2: VERIFY OTP
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
 
     if (otp.length !== OTP_LENGTH) {
-      MyToaster.warning("Please enter a valid OTP", "error");
+      MyToaster.warning("Please enter a valid OTP");
       return;
     }
 
     setLoading(true);
 
     try {
-      const data = await AuthApi.verifyOtp(new PasswordRequest(email, otp));
-      if (data.success) {
-        setToken(data.token);
+      const response = await AuthApi.verifyOtp(new PasswordRequest(email, otp));
+      if (response.success) {
+        setToken(response.token);
+        MyToaster.success(response?.message);
         setStep(3);
-        MyToaster.success("OTP verified successfully", "success");
       } else {
-        MyToaster.warning(data.message || "Failed to verify OTP", "error");
+        MyToaster.warning(response?.message);
       }
     } catch (err) {
-      MyToaster.error(err?.message || "Invalid OTP", "error");
+      MyToaster.error(err?.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   // STEP 3: RESET PASSWORD
@@ -103,35 +103,30 @@ export default function ForgotPassword() {
     e.preventDefault();
 
     if (!password || password !== confirmPassword) {
-      MyToaster.warning("Passwords do not match", "error");
+      MyToaster.warning("Passwords do not match");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await AuthApi.updatePassword(new PasswordRequest(email, null, password, token));
 
+      const response = await AuthApi.updatePassword(new PasswordRequest(email, null, password, token));
       if (response.success) {
+        MyToaster.success(response?.message);
         setStep(4);
-        MyToaster.success("Password updated successfully", "success");
       } else {
-        MyToaster.warning(response.message || "Failed to update password", "error");
+        MyToaster.warning(response?.message);
       }
     } catch (err) {
-      MyToaster.error(err?.message || "Password update failed", "error");
+      MyToaster.error(err?.message);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const resetForm = () => {
-    setStep(1);
-    setEmail("");
-    setOtp("");
-    setPassword("");
-    setConfirmPassword("");
-    setError("");
+    navigate("/login");
   };
 
   return (
@@ -234,9 +229,7 @@ export default function ForgotPassword() {
                   />
                 </FormControl>
 
-
-                <MyButton loading={loading} text="Send OTP" onClick={handleSendOtp} />
-
+                <MyButton loading={loading} text="Send OTP" type="submit" />
               </motion.form>
             )}
 
@@ -289,9 +282,7 @@ export default function ForgotPassword() {
                   </div>
                 </FormControl>
 
-
-                <MyButton loading={loading} text="Verify OTP" onClick={handleVerifyOtp} />
-
+                <MyButton loading={loading} text="Verify OTP" type="submit" />
               </motion.form>
             )}
 
@@ -378,9 +369,7 @@ export default function ForgotPassword() {
                   </InputGroup>
                 </FormControl>
 
-
-                <MyButton loading={loading} text="Update Password" onClick={handleResetPassword} />
-
+                <MyButton loading={loading} text="Update Password" type="submit" />
               </motion.form>
             )}
 
@@ -402,7 +391,7 @@ export default function ForgotPassword() {
                 <Text className="text-white/70 mb-8">
                   You can now log in with your new password.
                 </Text>
-                <MyButton loading={loading} text="Back to Login" onClick={resetForm} />
+                <MyButton loading={loading} text="Back to Login" onClick={resetForm} type="button" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -411,23 +400,23 @@ export default function ForgotPassword() {
             <Divider borderColor="whiteAlpha.300" />
             <p className="text-center text-white/40 text-[9px] mt-8 font-black uppercase tracking-[0.2em]">
               <Link
-                to="/"
+                to="/login"
                 className="text-white/60 hover:text-white text-[10px] font-black uppercase tracking-[0.2em] transition-colors flex items-center justify-center gap-2"
               >
                 <FiArrowLeft /> Return to Login
               </Link>
             </p>
           </div>
-
         </div>
       </MotionBox>
     </div>
   );
 }
 
-function MyButton({ loading, text, onClick }) {
+function MyButton({ loading, text, onClick, type = "button" }) {
   return (
     <Button
+      type={type}
       width="full"
       size="lg"
       h="65px"
@@ -439,7 +428,7 @@ function MyButton({ loading, text, onClick }) {
       fontSize="sm"
       textTransform="uppercase"
       letterSpacing="0.3em"
-      onClick={onClick}
+      onClick={type === "button" ? onClick : undefined}
       isDisabled={loading}
     >
       {loading ? (

@@ -64,14 +64,13 @@ export default function Profile() {
         setEditDescription(user.description || "");
         setEditAvatarUrl(user.avatar || "");
 
-        console.log(user);
-
-        MyToaster.info("Profile loaded successfully");
       }
     };
 
-    fetchProfile();
+    if (!user) fetchProfile();
+    MyToaster.info("Profile loaded successfully");
   }, []);
+
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];

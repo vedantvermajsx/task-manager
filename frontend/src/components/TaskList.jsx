@@ -88,7 +88,6 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                 setTasksCount(prev => prev - 1);
                 setUser(prev => ({ ...prev, tasksCount: prev.tasksCount - 1 }));
                 MyToaster.success("Task deleted successfully");
-                console.log(user);
             } else {
                 MyToaster.error(response.message || "Failed to delete task");
             }
@@ -129,7 +128,6 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
                             : t
                     )
                 );
-                console.log(user);
                 MyToaster.success("Task updated successfully");
             } else {
                 MyToaster.error(response.message || "Failed to update task");

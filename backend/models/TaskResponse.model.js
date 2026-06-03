@@ -5,6 +5,7 @@ class TaskResponse{
         this.description=task.description;
         this.completed=task.completed;
         this.createdAt=task.createdAt;
+        this.dueDate=task.dueDate;
     }
 }
 
