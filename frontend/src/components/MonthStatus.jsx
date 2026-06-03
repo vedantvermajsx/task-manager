@@ -56,7 +56,6 @@ function MonthStatus({ allTasks, loading: externalLoading, isStatic = false }) {
         const month = MONTHS[date.getMonth()];
         if (monthDataMap[month]) {
           monthDataMap[month].Total += 1;
-          console.log(task.completed);
           if (task.completed) {
             monthDataMap[month].Completed += 1;
           } else {

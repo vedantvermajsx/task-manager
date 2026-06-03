@@ -19,7 +19,7 @@ async function getTasks(req,res){
             const end = new Date(dateRequest);
             end.setHours(23, 59, 59, 999);
             
-            filter.createdAt = { $gte: start, $lte: end };
+            filter.dueDate = { $gte: start, $lte: end };
         }
 
         let query = Task.find(filter);
@@ -27,7 +27,7 @@ async function getTasks(req,res){
             const skip = page * limit;
             query = query.skip(skip).limit(limit);
         }
-        const taskCount = await Task.countDocuments({createdBy:userId,createdAt:filter.createdAt});
+        const taskCount = await Task.countDocuments({createdBy:userId,dueDate:filter.dueDate});
         
         const Tasks = await query;
         const ResponseTasks = Tasks.map((task) => new TaskResponse(task));

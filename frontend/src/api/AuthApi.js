@@ -153,7 +153,6 @@ class AuthApi extends Api {
             if(!response){
                 return this.defaultError;
             }
-            console.log(response);
             return response.data;
         }
         catch(err){

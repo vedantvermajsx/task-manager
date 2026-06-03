@@ -12,16 +12,12 @@ class TaskApi extends Api {
                 params: { page, size,date }
             });
             if(!response){
-                
                 return this.defaultError;
             }
 
             this.page++;
             return response.data;
         } catch (error) {
-              if(!error.status){
-                return this.defaultError;
-            }
             return error.response.data;
         }
     }
@@ -37,9 +33,6 @@ class TaskApi extends Api {
             return response.data;
 
         } catch (error) {
-              if(!error.status){
-                return this.defaultError;
-            }
             return error.response.data;
         }
     }
@@ -47,14 +40,12 @@ class TaskApi extends Api {
     async createTask(task) {
         try {
             const response = await this.axios.post("/task/addTask", task);
+            
             if(!response){
                 return this.defaultError;
             }
             return response.data;
         } catch (error) {
-              if(!error.status){
-                return this.defaultError;
-            }
            return error.response.data;
         }
     }
@@ -67,9 +58,6 @@ class TaskApi extends Api {
             }
             return response.data;
         } catch (error) {
-              if(!error.status){
-                return this.defaultError;
-            }
            return error.response.data;
         }
     }
@@ -82,9 +70,6 @@ class TaskApi extends Api {
             }
             return response.data;
         } catch (error) {
-              if(!error.status){
-                return this.defaultError;
-            }
            return error.response.data;
         }
     }

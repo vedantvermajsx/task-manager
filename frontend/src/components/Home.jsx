@@ -76,11 +76,15 @@ export default function Home() {
     try {
       const newTask = new TaskRequest(
         taskTitle.trim(),
-        taskDescription.trim()
+        taskDescription.trim(),
+        false,
+        selectedDate
       );
+
 
       setAdding(true);
       const response = await TaskApi.createTask(newTask);
+
 
       if (response.success) {
         const createdTask = response.ResponseTask;

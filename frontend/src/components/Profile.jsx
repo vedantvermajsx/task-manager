@@ -63,11 +63,10 @@ export default function Profile() {
         setEditUsername(user.username || "");
         setEditDescription(user.description || "");
         setEditAvatarUrl(user.avatar || "");
-
       }
     };
 
-    if (!user) fetchProfile();
+    fetchProfile();
     MyToaster.info("Profile loaded successfully");
   }, []);
 

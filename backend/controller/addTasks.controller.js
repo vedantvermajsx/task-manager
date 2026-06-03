@@ -5,7 +5,7 @@ import User from "../models/User.model.js";
 async function addTask(req,res){
     try {
 
-        const { title, description, completed } = req.body;
+        const { title, description, completed, dueDate } = req.body;
 
         if (!title || !description) {
             return res.status(400).json({
@@ -14,10 +14,21 @@ async function addTask(req,res){
             });
         }
 
+        const dueDay=new Date(dueDate).toISOString().split('T')[0];
+        const today=new Date().toISOString().split('T')[0];
+
+        if(dueDate && dueDay<today){
+            return res.status(400).json({
+                success: false,
+                message: "Due date cannot be in the past"
+            });
+        }
+
         const task = new Task({
             title,
             description,
             completed,
+            dueDate: dueDate || Date.now(),
             createdBy: req.user.id
         });
 
