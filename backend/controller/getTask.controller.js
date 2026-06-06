@@ -5,21 +5,21 @@ async function getTasks(req,res){
     try {
         const userId=req.user.id;
 
+        const dateRequest=req.query?.date;
+        const all=req.query?.all;
+
+
         
         const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : -1;
         const limit = parseInt(req.query.size) > 0 ? parseInt(req.query.size) : -1;
         
         let filter = { createdBy: userId };
         
-        if (req.query.all !== 'true') {
-            const dateRequest = req.query.date || Date.now();
-            const start = new Date(dateRequest);
-            start.setHours(0, 0, 0, 0);
-
-            const end = new Date(dateRequest);
-            end.setHours(23, 59, 59, 999);
+        if (all !== 'true') {
             
-            filter.dueDate = { $gte: start, $lte: end };
+            const filterDate= (dateRequest && new Date(dateRequest).toLocaleDateString()) || new Date().toLocaleDateString();
+            
+            filter.dueDate = filterDate;
         }
 
         let query = Task.find(filter);

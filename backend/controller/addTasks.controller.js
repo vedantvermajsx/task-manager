@@ -14,10 +14,13 @@ async function addTask(req,res){
             });
         }
 
-        const dueDay=new Date(dueDate).toISOString().split('T')[0];
-        const today=new Date().toISOString().split('T')[0];
+        
+        const updateDueDate=new Date(dueDate).toLocaleDateString();
+          
+        const todayDate=new Date().toLocaleDateString();
 
-        if(dueDate && dueDay<today){
+        
+        if(updateDueDate && updateDueDate<todayDate){
             return res.status(400).json({
                 success: false,
                 message: "Due date cannot be in the past"
@@ -28,7 +31,7 @@ async function addTask(req,res){
             title,
             description,
             completed,
-            dueDate: dueDate || Date.now(),
+            dueDate: updateDueDate || todayDate,
             createdBy: req.user.id
         });
 

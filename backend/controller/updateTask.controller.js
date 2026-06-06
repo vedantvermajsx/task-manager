@@ -21,11 +21,6 @@ async function updateTask(req,res){
             return res.status(401).json({success:false,message:"Unauthorized"});
         }
 
-        const hoursElapsed = (Date.now() - new Date(task.createdAt).getTime()) / (1000 * 60 * 60);
-        if(hoursElapsed >= 24 && !task.completed){
-            return res.status(403).json({success:false,message:"Task has expired after 24 hours and is now failed. No changes allowed."});
-        }
-
         const updatedTask=await Task.findByIdAndUpdate(id,{title,description,completed,createdBy:userId},{returnDocument:'after'});
 
         if(task.completed!=completed){
