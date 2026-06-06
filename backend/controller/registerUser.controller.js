@@ -1,6 +1,6 @@
 import User from "../models/User.model.js";
 import bcrypt from "bcrypt";
-
+import mailSender from "../utils/emailJs.js";
 
 async function registerUser(req,res){
     
@@ -86,6 +86,8 @@ async function registerUser(req,res){
         });
 
         await user.save();
+
+        await mailSender.sendWelcomeMail(email,name);
 
         res.status(201).json({
             success: true,

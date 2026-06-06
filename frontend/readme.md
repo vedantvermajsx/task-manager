@@ -49,9 +49,7 @@ This is the frontend application for Task Manager, a robust task management appl
 ## Project Structure
 
 - **public/**: Static assets
-  - `favicon.svg`
-  - `icons.svg`
-  - `logo.ico`
+  - `logo.svg`
 - **src/api/**: API integration and request handling
   - `Api.js`: Base API configuration with health check interceptor
   - `AuthApi.js`: Authentication API calls

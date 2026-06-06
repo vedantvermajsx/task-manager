@@ -135,7 +135,7 @@ export default function Home() {
       >
         <Flex align="center" gap={3} onClick={() => navigate("/")} cursor="pointer">
           <Heading as="h2" size="sm" letterSpacing="0.2em" className="text-white font-black uppercase">
-            Task Manager
+            Taskly
           </Heading>
         </Flex>
 
