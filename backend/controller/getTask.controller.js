@@ -1,5 +1,6 @@
 import Task from "../models/Task.model.js";
 import TaskResponse from "../models/TaskResponse.model.js";
+import { formatDate, getTodayDate } from "../utils/dateUtils.js";
 
 async function getTasks(req,res){
     try {
@@ -7,7 +8,6 @@ async function getTasks(req,res){
 
         const dateRequest=req.query?.date;
         const all=req.query?.all;
-
 
         
         const page = parseInt(req.query.page) >= 0 ? parseInt(req.query.page) : -1;
@@ -17,7 +17,7 @@ async function getTasks(req,res){
         
         if (all !== 'true') {
             
-            const filterDate= (dateRequest && new Date(dateRequest).toLocaleDateString()) || new Date().toLocaleDateString();
+            const filterDate = dateRequest ? formatDate(dateRequest) : getTodayDate();
             
             filter.dueDate = filterDate;
         }

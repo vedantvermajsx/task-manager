@@ -1,6 +1,7 @@
 import Task from "../models/Task.model.js";
 import TaskResponse from "../models/TaskResponse.model.js";
 import User from "../models/User.model.js";
+import { formatDate, getTodayDate } from "../utils/dateUtils.js";
 
 async function addTask(req,res){
     try {
@@ -15,12 +16,10 @@ async function addTask(req,res){
         }
 
         
-        const updateDueDate=new Date(dueDate).toLocaleDateString();
-          
-        const todayDate=new Date().toLocaleDateString();
+        const updateDueDate = formatDate(dueDate);
+        const todayDate = getTodayDate();
 
-        
-        if(updateDueDate && updateDueDate<todayDate){
+        if(updateDueDate && updateDueDate < todayDate){
             return res.status(400).json({
                 success: false,
                 message: "Due date cannot be in the past"

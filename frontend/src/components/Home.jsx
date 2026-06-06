@@ -28,6 +28,7 @@ import { AuthContext } from "../contexts/AuthContext.jsx";
 import { useContext } from "react";
 import AuthApi from "../api/AuthApi.js";
 import MyToaster from "./MyToaster";
+import { formatDate, getTodayDate } from "../utils/dateUtils.js";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -43,9 +44,8 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasksCount, setTasksCount] = useState(0);
 
-  const today = new Date().toLocaleDateString();
-
-  const selected = selectedDate.toLocaleDateString();
+  const today = getTodayDate();
+  const selected = formatDate(selectedDate);
 
   const isPastDate = selected < today;
 

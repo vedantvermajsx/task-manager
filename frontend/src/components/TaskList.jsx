@@ -1,6 +1,7 @@
 import Task from "./Task";
 import { useEffect, useState, useRef, useCallback, useContext } from "react";
 import TaskApi from "../api/TaskApi";
+import { formatDate } from "../utils/dateUtils.js";
 
 const SCROLLABLE_MAX_HEIGHT = "700px";
 import MyToaster from "./MyToaster";
@@ -24,7 +25,7 @@ const TaskList = ({ selectedDate, tasks, setTasks, tasksCount, setTasksCount, al
         setLoading(true);
 
         try {
-            const fetchedTasks = await TaskApi.getTasks(selectedDate);
+            const fetchedTasks = await TaskApi.getTasks(formatDate(selectedDate));
 
             if (fetchedTasks.success) {
                 const newTasks = fetchedTasks.ResponseTasks || [];
