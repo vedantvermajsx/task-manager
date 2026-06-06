@@ -43,10 +43,10 @@ export default function Home() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasksCount, setTasksCount] = useState(0);
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const selected = new Date(selectedDate);
-  selected.setHours(0, 0, 0, 0);
+  const today = new Date().toLocaleDateString();
+
+  const selected = selectedDate.toLocaleDateString();
+
   const isPastDate = selected < today;
 
   useEffect(() => {

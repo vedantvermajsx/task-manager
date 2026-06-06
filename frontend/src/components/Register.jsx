@@ -12,7 +12,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, px } from "framer-motion";
 import AuthApi from "../api/AuthApi.js";
 import RegisterRequest from "../models/ResisterRequest.js";
 import MyToaster from "./MyToaster.jsx";
@@ -107,11 +107,11 @@ export default function Register() {
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-tr from-white/10 to-transparent opacity-30 pointer-events-none" />
 
           <div className="text-center mb-10 relative flex flex-col items-center">
-            <Heading as="h1" size="xl" letterSpacing="-0.03em" className="text-white font-black">
+            <Heading as="h1" size="lg" letterSpacing="-0.03em" className="text-white font-black">
               Create Account
             </Heading>
             <Text className="text-white/80 mt-2 text-xs font-bold uppercase tracking-[0.2em]">
-              Join Task Manager System
+              Join Taskly
             </Text>
           </div>
 
@@ -124,6 +124,7 @@ export default function Register() {
                 value={form.name}
                 onChange={handleChange}
                 {...inputStyles}
+                h={"50px"}
               />
             </FormControl>
 
@@ -136,6 +137,7 @@ export default function Register() {
                 value={form.email}
                 onChange={handleChange}
                 {...inputStyles}
+                h={"50px"}
               />
             </FormControl>
 
@@ -149,10 +151,12 @@ export default function Register() {
                   value={form.password}
                   onChange={handleChange}
                   {...inputStyles}
+                  h={"50px"}
                 />
                 <InputRightElement width="4rem" h="60px">
                   <Button
                     h="1.5rem"
+                    mb="5px"
                     size="xs"
                     variant="unstyled"
                     onClick={() => setShowPwd((v) => !v)}
@@ -180,7 +184,7 @@ export default function Register() {
                     type="submit"
                     width="full"
                     size="lg"
-                    h="65px"
+                    h="55px"
                     bg={"white"}
                     _hover={{
                       bg: isFormValid ? "whiteAlpha.900" : "white"

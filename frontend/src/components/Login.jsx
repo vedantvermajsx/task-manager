@@ -104,7 +104,7 @@ export default function Login() {
                                 value={form.email}
                                 onChange={handleChange}
                                 size="lg"
-                                h="60px"
+                                h="50px"
                                 className="!bg-white/10 !border-white/20 !text-white placeholder:!text-white/40 !rounded-xl focus:!border-brand-500"
                                 _placeholder={{ color: "whiteAlpha.400" }}
                                 _focus={{ borderColor: "brand.500", boxShadow: "none" }}
@@ -124,7 +124,7 @@ export default function Login() {
                                     placeholder="••••••••"
                                     value={form.password}
                                     onChange={handleChange}
-                                    h="60px"
+                                    h="50px"
                                     className="!bg-white/10 !border-white/20 !text-white placeholder:!text-white/40 !rounded-xl focus:!border-brand-500"
                                     _placeholder={{ color: "whiteAlpha.400" }}
                                     _focus={{ borderColor: "brand.500", boxShadow: "none" }}
@@ -133,7 +133,8 @@ export default function Login() {
                                 />
                                 <InputRightElement width="4rem" h="60px">
                                     <Button
-                                        h="1.5rem"
+                                        h="2rem"
+                                        mb="5px"
                                         size="xs"
                                         variant="unstyled"
                                         onClick={() => setShowPwd((v) => !v)}
@@ -170,7 +171,7 @@ export default function Login() {
                                     type="submit"
                                     width="full"
                                     size="lg"
-                                    h="65px"
+                                    h="55px"
                                     bg={"white"}
                                     _hover={{
                                         bg: isFormValid ? "whiteAlpha.900" : "white"
