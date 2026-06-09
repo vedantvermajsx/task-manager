@@ -102,8 +102,6 @@ The project is structured as a monorepo containing both the frontend and backend
 - React 19 - UI library
 - Vite - Build tool & dev server
 - Tailwind CSS & PostCSS - Styling
-- Framer Motion - Animations
-- React Three Fiber / Drei - 3D graphics and shaders
 - Chakra UI - Component library
 - Axios - HTTP client
 - React Router DOM - Routing
@@ -111,7 +109,6 @@ The project is structured as a monorepo containing both the frontend and backend
 - React Calendar - Date picker
 - React Icons - Icons
 - Recharts - Charts
-- Three.js - 3D graphics
 - Lucide React - Icon library
 - React Device Detect - Responsive device detection
 
