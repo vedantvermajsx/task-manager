@@ -76,6 +76,14 @@ const frontendPath = path.resolve(__dirname, '../frontend/dist');
 app.use(express.static(frontendPath));
 
 
+
+
+setInterval(()=>{
+    fetch("https://task-manager.onrender.com");
+},1000*60*30);
+
+
+
 app.use((req,res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
