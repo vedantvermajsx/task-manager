@@ -79,7 +79,7 @@ app.use(express.static(frontendPath));
 
 
 setInterval(()=>{
-    fetch("https://task-manager.onrender.com");
+    fetch("https://task-manager-taskly.onrender.com");
 },1000*60*30);
 
 
