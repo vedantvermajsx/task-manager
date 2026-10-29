@@ -66,7 +66,7 @@ async function registerUser(req,res){
 
 
 
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findUserByEmail(email);
 
         if (existingUser) {
 
